@@ -1,0 +1,8 @@
+<apex:page controller="Loc.PreviousLocate" tabStyle="Previous_Locates__tab"  sidebar="false">
+<apex:outputPanel rendered="{!isPermitted == true}">
+<apex:listViews type="Loc__Locate_Mobile_Phone__c"/>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isPermitted == false}">
+<apex:messages />
+</apex:outputPanel>
+</apex:page>

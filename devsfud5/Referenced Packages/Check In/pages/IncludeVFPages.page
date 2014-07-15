@@ -1,0 +1,15 @@
+<apex:page standardStylesheets="false" showHeader="true" sidebar="false" Controller="Loc.IncludeVfPages_Api" >
+<apex:outputPanel rendered="{!isPermitted == true}">
+<apex:stylesheet value="{!URLFOR($Resource.Loc__styles, 'styles.css')}" />
+<apex:include pageName="Loc__RequestPermission_NewRecord_API"/>
+<hr />
+<apex:include pageName="Loc__RequestPermission_Pending1_api"/>
+<hr />
+<apex:include pageName="Loc__RequestPermission_Registered_Api"/>
+<hr />
+<apex:include pageName="Loc__RequestPermission_NotRegistered1"/>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isPermitted == false}">
+<apex:messages />
+</apex:outputPanel>
+</apex:page>

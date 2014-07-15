@@ -1,0 +1,536 @@
+<apex:page controller="Loc.TestTabController" cache="false" > 
+<apex:outputPanel rendered="{!isPermitted == true}">
+  <apex:tabPanel switchType="client" selectedTab="name1" id="theTabPanel">
+        <apex:tab label="User Profile" name="name1" id="tabOne">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" ></script>
+<!-- custom css class for tables -->
+<style type="text/css">
+    TABLE.brd {
+    align: center;
+    border: 2px outset #0000FF; 
+    background: #FFFFFF;
+    padding: 10px;
+   }
+</style>
+<!-- end -->
+<script>
+    var j$ = jQuery.noConflict();
+    function fixId(myid) {
+       return '#' + myid.replace(new RegExp("(:|\\.)", "g"), '\\\$1');
+    }
+
+
+
+</script>
+
+<script>
+/***************Functions for "View/Edit" panel*******************/
+    /*"End Time" > "Start Time" check*/
+    function timeValidate()
+    {
+        if (parseInt(wkdyStartSelectList.val()) >= parseInt(wkdyEndSelectList.val()))
+        {
+            alert('Start time can`t exceed end time');
+            wkdyStartSelectList.val('9');
+            wkdyEndSelectList.val('13');
+        }
+        
+        if (parseInt(wkndStartSelectList.val()) >= parseInt(wkndEndSelectList.val()))
+        {
+            alert('Start time can`t exceed end time');
+            wkndStartSelectList.val('1');
+            wkndEndSelectList.val('9');
+        }
+    }
+    /*enable all fields when we press create button*/
+    function enableAll()
+    {
+       // optIn.removeAttr('disabled');
+        cell.removeAttr('disabled');
+        gps.removeAttr('disabled');
+        noBl.removeAttr('disabled');
+        wkdyStartSelectList.removeAttr('disabled');
+        wkdyEndSelectList.removeAttr('disabled'); 
+        wkndStartSelectList.removeAttr('disabled'); 
+        wkndEndSelectList.removeAttr('disabled'); 
+        wdayCheckbox.removeAttr('disabled');
+        wendCheckbox.removeAttr('disabled');
+        locateMob.removeAttr('disabled');
+        addMob.removeAttr('disabled');
+        //appSetUp.removeAttr('disabled');
+        //previLoca.removeAttr('disabled');
+        deleteButton.removeAttr('disabled');
+        deleteButton.removeAttr('class');
+        deleteButton.attr('class','btn');
+        saveButton.removeAttr('disabled');
+        saveButton.removeAttr('class');
+        saveButton.attr('class','btn');
+    }
+/*disables all input if profile name - 'Super User'. Also disables delete button if profile name - 'Standard User'*/
+    function profileCheck()
+    {
+        if(selectedprofile.val() == '{!superUserId}')
+        {
+            //optIn.attr('disabled','disabled');
+            cell.attr('disabled','disabled');
+            gps.attr('disabled','disabled');
+            noBl.attr('disabled','disabled');
+            wdayCheckbox.attr('disabled','disabled');
+            wendCheckbox.attr('disabled','disabled');
+            locateMob.attr('disabled','disabled');
+            addMob.attr('disabled','disabled');
+            appSetUp.attr('disabled','disabled');
+            previLoca.attr('disabled','disabled');
+            deleteButton.attr('disabled','disabled');
+            deleteButton.removeAttr('class');
+            deleteButton.attr('class','btnDisabled');
+            saveButton.attr('disabled','disabled');
+            saveButton.removeAttr('class');
+            saveButton.attr('class','btnDisabled');
+            wkdyStartSelectList.attr('disabled','disabled');
+            wkdyEndSelectList.attr('disabled','disabled');
+            wkndStartSelectList.attr('disabled','disabled');
+            wkndEndSelectList.attr('disabled','disabled');
+        }
+        else
+        {
+            enableAll();
+            if(selectedprofile.val() == '{!standardUserId}')
+            {
+                deleteButton.attr('disabled','disabled');
+                deleteButton.removeAttr('class');
+                deleteButton.attr('class','btnDisabled');
+            }
+            else
+            {
+                deleteButton.removeAttr('disabled');
+                deleteButton.removeAttr('class');
+                deleteButton.attr('class','btn');
+            }
+        }
+    }
+
+/*Clears and disables all fields and save button if optIn checkbox isn`t checked*/    
+    function optIncheck()
+    {
+        if(optIn.attr('checked') == false)
+        {
+            optIn.attr('checked',false);
+            cell.attr('checked',false);
+            gps.attr('checked',false);
+            noBl.attr('checked',false);
+            wdayCheckbox.attr('checked',false);
+            wendCheckbox.attr('checked',false);
+            //optIn.attr('disabled','disabled');
+            cell.attr('disabled','disabled');
+            gps.attr('disabled','disabled');
+            noBl.attr('disabled','disabled');
+            wdayCheckbox.attr('disabled','disabled');
+            wendCheckbox.attr('disabled','disabled');
+            locateMob.attr('disabled','disabled');
+            addMob.attr('disabled','disabled');
+            appSetUp.attr('disabled','disabled');
+            previLoca.attr('disabled','disabled');
+            saveButton.attr('disabled','disabled');
+            saveButton.removeAttr('class');
+            saveButton.attr('class','btnDisabled');
+            //optIn.removeAttr('disabled');
+            wkdyStartSelectList.attr('disabled','disabled');
+            wkdyEndSelectList.attr('disabled','disabled');
+            wkndStartSelectList.attr('disabled','disabled');
+            wkndEndSelectList.attr('disabled','disabled');
+            weekendsShow();
+            weekdaysShow();
+        }
+        else
+        {
+            //optIn.removeAttr('disabled');
+            cell.removeAttr('disabled');
+            gps.removeAttr('disabled');
+            noBl.removeAttr('disabled');
+            wdayCheckbox.removeAttr('disabled');
+            wendCheckbox.removeAttr('disabled');
+            locateMob.removeAttr('disabled');
+            addMob.removeAttr('disabled');
+            appSetUp.removeAttr('disabled');
+           // previLoca.removeAttr('disabled');
+            wkdyStartSelectList.removeAttr('disabled');
+            wkdyEndSelectList.removeAttr('disabled');
+            wkndStartSelectList.removeAttr('disabled');
+            wkndEndSelectList.removeAttr('disabled');
+            saveButton.removeAttr('disabled');
+            saveButton.removeAttr('class');
+            saveButton.attr('class','btn');
+        }
+    }
+
+/*Shows/hides table with input fields for weekdays blackout start/end time*/    
+    function weekdaysShow()
+    {
+        if(wdayCheckbox.attr('checked') == true)
+        {
+            noBl.attr('checked',false);
+        }
+        else
+        {
+            if(wendCheckbox.attr('checked') == false)
+                noBl.attr('checked',true);
+            wkdyStartSelectList.val('9');
+            wkdyEndSelectList.val('13');
+        }
+    }
+
+/*Shows/hides table with input fields for weekends blackout start/end time*/        
+    function weekendsShow()
+    {
+        if(wendCheckbox.attr('checked') == true)
+        {
+            noBl.attr('checked',false);
+        }
+        else
+        {
+            if(wdayCheckbox.attr('checked') == false)
+                noBl.attr('checked',true);
+            wkndStartSelectList.val('9');
+            wkndEndSelectList.val('13');
+        }
+    }
+
+/*Makes only one accuracy option available*/    
+    function accuracyGps()
+    {
+        if(gps.attr('checked') == true)
+        {
+            cell.attr('checked',false);
+        }
+        else
+        {
+            cell.attr('checked',true);
+        }
+    }
+
+/*Makes only one accuracy option available*/     
+    function accuracyCell()
+    {
+        if(cell.attr('checked') == true)
+        {
+            gps.attr('checked',false);
+        }
+        else
+        {
+            gps.attr('checked',true);
+        }
+    }
+
+
+/*Makes only only one option available(blackout or none)*/
+    function blackoutHide()
+    {
+        if (noBl.attr('checked') == true)
+        {
+            wendCheckbox.attr('checked',false);
+            wdayCheckbox.attr('checked',false);
+            blackoutShow();
+        }
+    }
+
+/*Opens form for adding profile*/
+    function addProfile()
+    {
+        j$('#inputContainer').show();
+        j$('#profileContainer').hide();
+        comLink.hide();
+        deleteButton.hide();
+        createButton.hide();
+        cancelProfileButton.show();
+        cancelButton.hide();
+        clearFields();
+        clearButton.show();
+    }
+
+/*Cancels adding profile*/ 
+    function cancelAddingProfile()
+    {
+        j$('#inputContainer').hide();
+        j$('#profileContainer').show();
+        comLink.show();
+        cancelProfileButton.hide();
+        cancelButton.show();
+        clearButton.hide();
+        startPanel.show();
+        createButton.show();
+        cancelProfileButton.hide();
+        deleteButton.show();
+    }
+
+/*Clears all fields*/    
+    function clearFields()
+    {
+        profileName.val('');
+        optIn.attr('checked',false);
+        cell.attr('checked',false);
+        gps.attr('checked',false);
+        noBl.attr('checked',false);
+        locateMob.attr('checked',false);
+        addMob.attr('checked',false);
+        appSetUp.attr('checked',false);
+        previLoca.attr('checked',false);
+        wdayCheckbox.attr('checked',false);
+        wendCheckbox.attr('checked',false);
+        //optIn.attr('disabled','disabled');
+        cell.attr('disabled','disabled');
+        gps.attr('disabled','disabled');
+        noBl.attr('disabled','disabled');
+        wdayCheckbox.attr('disabled','disabled');
+        wendCheckbox.attr('disabled','disabled');
+        locateMob.attr('disabled','disabled');
+        addMob.attr('disabled','disabled');
+        appSetUp.attr('disabled','disabled');
+        previLoca.attr('disabled','disabled');
+        saveButton.attr('disabled','disabled');
+        saveButton.removeAttr('class');
+        saveButton.attr('class','btnDisabled');
+        //optIn.removeAttr('disabled');
+        j$('#blackout1').fadeOut();
+        j$('#blackout2').fadeOut();
+        weekendsShow();
+        weekdaysShow();
+    }
+     
+</script>
+
+
+<div class="brd">
+    <div align="center">
+        <div>
+            <apex:pagemessages />
+        </div>
+    </div>
+    <apex:form id="startForm">
+        <table class="brd" align="center" width="60%">
+            <tr valign="center">
+            <!-- -->
+                <td id="labelProfile" width="30%" style="padding-top : 5px;" align="right">Profile:</td>
+                <td id="profileContainer" width="15%">
+                    <apex:outputPanel rendered="{!selectedProfile.Id != null}">
+                        <apex:selectList id="profile" value="{!profileId}" size="1">
+                            <apex:selectOptions value="{!profiles}"/>
+                            <apex:actionSupport action="{!getProfile}" event="onchange" reRender="startForm"/>
+                        </apex:selectList>
+                        <script>var selectedprofile = j$(fixId('{!$Component.profile}'));</script>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!selectedProfile.Id == null}">
+                        <apex:inputField id="profName" value="{!selectedProfile.Name}"/>
+                        <script>var profileName = j$(fixId('{!$Component.profName}'))</script>
+                    </apex:outputPanel>
+                </td>
+                
+                <!-- -->
+                <td id="createButtonContainer" width="15%" align="left">
+                    <apex:outputPanel rendered="{!selectedProfile.Id != null}">
+                        <apex:commandButton id="addprofile" value="Create New Profile"  action="{!createProfile}" reRender="startForm" />
+                        <script> var createButton = j$(fixId('{!$Component.addprofile}'));</script>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!selectedProfile.Id == null}">
+                        <apex:commandButton id="cancelProfile" value="Cancel" action="{!getProfile}" reRender="startForm"/>
+                        <script> var cancelProfileButton = j$(fixId('{!$Component.cancelProfile}'));</script>
+                    </apex:outputPanel>
+                </td>
+                
+                    <td align="left">
+                        <apex:outputPanel rendered="{!And(selectedProfile.Id != null,deletebuttonflag=true)}">
+                            <apex:commandButton id="delButton" action="{!deleteProfile}" value="Delete Profile"/>
+                            <script>var deleteButton = j$(fixId('{!$Component.delButton}'));</script>
+                        </apex:outputPanel>
+                    </td>
+                    <td style="padding-top : 5px">
+                        <apex:outputPanel rendered="{!selectedProfile.Id != null}">
+                            <apex:outputLink id="assignLink" value="/apex/assigningProfile?profileId={!profileId}&sfdc.tabName=01rF0000000VABO">Assign selected profile</apex:outputLink>
+                            <script>var comLink = j$(fixId('{!$Component.assignLink}'));</script>
+                        </apex:outputPanel>
+                    </td>
+                
+            </tr>
+        </table>
+        <!-- -->
+        <apex:outputPanel id="startHerePanel">
+            <table class="brd" align="center" width="60%"> 
+                <tr valign="center">
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="opt" value="{!selectedProfile.Loc__Opt_In__c}" onclick="optIncheck()" disabled="true"/>
+                        <script>var optIn = j$(fixId('{!$Component.opt}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">Opt-in Required : Mobile User must opt-in via SMS</td>
+                </tr>
+                <tr valign="center">
+                    <td width="30%" align="center"><strong>User Permissions</strong></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="locateMobile" value="{!selectedProfile.Loc__Locate_Mobile_Phones__c}"/>
+                        <script>var locateMob = j$(fixId('{!$Component.locateMobile}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Access “Locate Now”
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="addMobiles" value="{!selectedProfile.Loc__Add_new__c}"/>
+                        <script>var addMob = j$(fixId('{!$Component.addMobiles}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Access “Permission To Locate”
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="prevLoc" value="{!selectedProfile.Loc__Previous_Locate__c}"/>
+                        <script>var previLoca = j$(fixId('{!$Component.prevLoc}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Access “Previous Locates”
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="appSetup" value="{!selectedProfile.Loc__App_Setup__c}"/>
+                        <script>var appSetUp = j$(fixId('{!$Component.appSetup}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Access “App Setup”
+                    </td>
+                </tr>
+                
+                <tr valign="center">
+                    <td width="30%" align="center"><strong>Location Accuracy</strong></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="zipcell" value="{!selectedProfile.Loc__City_Zip_code_CELL__c}" onchange="accuracyCell()"/>
+                        <script>var cell = j$(fixId('{!$Component.zipcell}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        City &amp; Zip code (CELL)
+                    </td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="gpslevel" value="{!selectedProfile.Loc__Street_Level_A_GPS__c}" onchange="accuracyGps()"/>
+                        <script>var gps = j$(fixId('{!$Component.gpslevel}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Street Level (A-GPS)
+                    </td>
+                </tr>
+                <tr valign="center">
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr valign="center">
+                    <td width="30%" align="center"><strong>Allowed Periods</strong></td>
+                </tr>
+                <tr valign="center">
+                    <td width="100%" colspan="2" style="padding-left:70px" align="left">Allow users to locate mobile phones during specified periods</td>
+                </tr>
+                <tr valign="center">
+                    <td>&nbsp;&nbsp;&nbsp;</td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="noBlOuts" value="{!selectedProfile.Loc__None__c}" onchange="blackoutHide()"/>
+                        <script>var noBl = j$(fixId('{!$Component.noBlOuts}'));</script>
+                    </td>
+                    <td width="70%" style="padding-top : 2px;" align="left">
+                        Any time
+                    </td>
+                </tr>
+                <tr id="blackout1">
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="weekdaysCheckbox" value="{!selectedProfile.Loc__Allow_locates_Monday_Friday__c}" onchange="weekdaysShow()"/>
+                        <script>var wdayCheckbox = j$(fixId('{!$Component.weekdaysCheckbox}'));</script>
+                    </td>
+                    <td width="70%"  align="left">
+                        Mon–Fri&nbsp;&nbsp;
+                        <apex:selectList id="wkdyStartTime" value="{!wkdyStartTime}" size="1" onchange="timeValidate()">
+                            <apex:selectOptions value="{!weekdaysStartTime}"/>
+                        </apex:selectList>
+                        <script> var wkdyStartSelectList = j$(fixId('{!$Component.wkdyStartTime}'));</script>
+                        &nbsp;to&nbsp;
+                        <apex:selectList id="wkdyEndTime" value="{!wkdyEndTime}" size="1" onchange="timeValidate()">
+                            <apex:selectOptions value="{!weekdaysEndTime}"/>
+                        </apex:selectList>
+                        <script> var wkdyEndSelectList = j$(fixId('{!$Component.wkdyEndTime}'));</script>
+                    </td>
+                </tr>
+                
+                <tr id="blackout2">
+                    <td width="30%" align="right" style="padding-right : 20px;">
+                        <apex:inputCheckbox id="weekendsCheckbox" value="{!selectedProfile.Loc__Allow_locates_Saturday_and_Sunday__c}" onchange="weekendsShow()"/>
+                        <script>var wendCheckbox = j$(fixId('{!$Component.weekendsCheckbox}'));</script>
+                    </td>
+                    <td width="70%"  align="left">
+                        Saturday and Sunday&nbsp;&nbsp;
+                        <apex:selectList id="wkndStartTime" value="{!wkndStartTime}" size="1" onchange="timeValidate()">
+                            <apex:selectOptions value="{!weekendsStartTime}"/>
+                        </apex:selectList>
+                        <script> var wkndStartSelectList = j$(fixId('{!$Component.wkndStartTime}'));</script>
+                        &nbsp;to&nbsp;
+                        <apex:selectList id="wkndEndTime" value="{!wkndEndTime}" size="1" onchange="timeValidate()">
+                            <apex:selectOptions value="{!weekendsEndTime}"/>
+                        </apex:selectList>
+                        <script> var wkndEndSelectList = j$(fixId('{!$Component.wkndEndTime}'));</script>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <apex:commandButton id="savebtn" action="{!saveProfile}" value="Save"/>
+                        <script>var saveButton = j$(fixId('{!$Component.savebtn}'));</script>
+                    </td>
+                    <td align="left">
+                        <apex:outputPanel rendered="{!selectedProfile.Id != null}">
+                            <apex:commandButton id="cancel" value="Cancel" action="{!getProfile}" reRender="startHerePanel"/>
+                            <script>var cancelButton = j$(fixId('{!$Component.cancel}'));</script>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!selectedProfile.Id == null}">
+                            <apex:commandButton id="clear" value="Clear Fields" onclick="clearFields()" reRender="startHerePanel"/>
+                            <script>var clearButton = j$(fixId('{!$Component.clear}'));</script>
+                        </apex:outputPanel>
+                    </td>
+                </tr>
+            </table>
+        <script>
+        /*Check`s what profile is selected on load and shows weekend and weekday checkboxes if blackout checked == true*/
+        function p()
+        {
+            if('{!JSINHTMLENCODE(selectedProfile.Name)}' != '')
+            {
+                profileCheck();
+            }
+        }
+        p();
+        weekdaysShow();
+        weekendsShow();
+        </script>
+        </apex:outputPanel>
+        <script>var startPanel = j$(fixId('{!$Component.startHerePanel}'));</script>
+    </apex:form>
+</div>
+        </apex:tab>
+        
+        
+        
+        <apex:tab label="Authenticate" name="name2" id="tabTwo" immediate="true">
+        <apex:form >
+            <apex:iframe src="{!url}" scrolling="true" id="theIframe"/>
+        </apex:form>
+        </apex:tab>
+        
+
+    </apex:tabPanel>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!isPermitted == false}">
+        <apex:messages />
+    </apex:outputPanel>
+</apex:page>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>21.0</apiVersion>
+    <description>The mobile phone user must Opt-In to grant permission for the locate service. Upon clicking &quot;Request Permission&quot;, an SMS is sent to the mobile phone. If the mobile phone user respond via SMS to confirm Opt-in, the status changes to &quot;Opt-in&quot; and the mobile phone can be located</description>
+    <label>Request Permission Pending1</label>
+</ApexPage>

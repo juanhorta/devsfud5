@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>Hierarchy</customSettingsType>
+    <customSettingsVisibility>Protected</customSettingsVisibility>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>Chatter_CheckIn_Keyword__c</fullName>
+        <defaultValue>&quot;checkin&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Keyword if detected in Chatter Item Feed inserts an Event with CheckIn checkbox selected</description>
+        <externalId>false</externalId>
+        <label>Chatter CheckIn Keyword</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Chatter_CheckOut_Keyword__c</fullName>
+        <defaultValue>&quot;checkout&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Keyword if detected in Chatter Item Feed, edits an Event with Checkin selected and location not null selects the Checkout checkbox</description>
+        <externalId>false</externalId>
+        <label>Chatter CheckOut Keyword</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CloudMade_API_Key__c</fullName>
+        <defaultValue>&quot;22d0045fad9a4429acc8d60580674cd3&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>CloudMade_API_Key</label>
+        <length>80</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CloudMade_JS_Tile_URL__c</fullName>
+        <defaultValue>&quot;https://d1qte70nkdppk5.cloudfront.net/wml/latest/web-maps-lite.js&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>The CloudMade JavaScript Tile URL for accessing the cloudmade mapping service.  Default values are:
+URL: http://tile.cloudmade.com/wml/latest/web-maps-lite.js
+(SSL) URL: https://d1qte70nkdppk5.cloudfront.net/wml/latest/web-maps-lite.js</description>
+        <externalId>false</externalId>
+        <label>CloudMade_JS_Tile_URL</label>
+        <length>250</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>DelayTime__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>DelayTime</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Email_Locate_Mobile_Numbers_Keyword__c</fullName>
+        <defaultValue>&quot;#LocateMobilePhone&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Keyword used in Subject Line of an Inbound Email that will fire off a locate now action.  The email body is used to find a list of mobile numbers to locate.  The email body can only contain 1 mobile number per line.</description>
+        <externalId>false</externalId>
+        <label>Email Locate Mobile Numbers Keyword</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Email_Locate_Sender_Keyword__c</fullName>
+        <defaultValue>&quot;#LocateSender&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Keyword used in Subject Line of an Inbound Email that will fire off a locate now action.  The senders email address is used to lookup the user account to locate.</description>
+        <externalId>false</externalId>
+        <label>Email Locate Sender Keyword</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Is_Account_Geocode_Trigger_Enabled__c</fullName>
+        <defaultValue>true</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Should always be true.  Only set to false temporarily when updating a large list of accounts and you don&apos;t want the geocoding web service called.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Should always be true.  Only set to false temporarily when updating a large list of accounts and you don&apos;t want the geocoding web service called.</inlineHelpText>
+        <label>Is Account Geocode Trigger Enabled</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Mapquest_API_Key__c</fullName>
+        <defaultValue>&quot;Gmjtd%7Cluur2l0yn1%2Crs%3Do5-lr2a1&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Mapquest API key</description>
+        <externalId>false</externalId>
+        <label>Mapquest API Key</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mapquest_API_Url__c</fullName>
+        <defaultValue>&quot;https://www.mapquestapi.com/sdk/leaflet/v1.0/mq-map.js&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>Url to access Mapquest Leaflet support</description>
+        <externalId>false</externalId>
+        <label>Mapquest API Url</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MaxGetLocationList__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>MaxGetLocationList</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MaxPhonesPerUser__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>MaxPhonesPerUser</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Note_Locate_Keyword__c</fullName>
+        <defaultValue>&quot;Visit Report&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <description>If Note title includes keyword, and the User&apos;s Mobile is opted-in the User is located and the note is displayed in Location Analytics. If note related to Account, Account and User Location displayed on Check-In Map</description>
+        <externalId>false</externalId>
+        <label>Note Locate Keyword</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SFLBS_Url__c</fullName>
+        <defaultValue>&quot;https://api.gpsdashboard.com&quot;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>SFLBS Url</label>
+        <length>250</length>
+        <required>true</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ScheduledApex_1hour__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ScheduledApex+1hour</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ScheduledApex_24hour__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ScheduledApex+24hour</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ScheduledApex_6hour__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>ScheduledApex+6hour</label>
+        <length>20</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>endPointPrefix__c</fullName>
+        <defaultValue>&apos;sflbs&apos;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>endPointPrefix</label>
+        <length>40</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>serverName__c</fullName>
+        <defaultValue>&apos;na7.salesforce.com&apos;</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>serverName</label>
+        <length>30</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Config</label>
+</CustomObject>

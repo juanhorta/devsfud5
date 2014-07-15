@@ -1,0 +1,62 @@
+<apex:page standardController="Archivo_amazon_s3__c" extensions="CTR001_NewS3File_Step1">
+	<apex:pageMessages />
+	<form 
+		action="https://s3.amazonaws.com/{!CurrentRecord.Bucket__c}"
+		method="post" 
+		enctype="multipart/form-data">
+
+		<input type="hidden"  
+			name="key"
+			value="{!FileName}" /> 
+			
+		<input type="hidden"
+		 	name="AWSAccessKeyId" 
+		 	value="{!key}" /> 
+		 	
+	 	<input type="hidden"  
+	 		name="policy" 
+	 		value="{!policy}" /> 
+	 		
+		<input type="hidden"  
+ 			name="signature" 
+ 			value="{!signedPolicy}" /> 
+ 			
+		<input type="hidden"  
+			name="acl"
+			value="{!FileAccess}" /> 
+		
+		<input type="hidden"  
+			name="Content-Type" 
+			value="{!ContentType}" />  
+			
+		<input type="hidden" 
+			name="success_action_redirect" 
+			value="https://{!serverURL}{!PR_retURL}" /> 
+			
+		<apex:pageBlock title="" mode="edit">
+			<apex:pageBlockButtons >
+				<input class="btn" type="submit" value="Crear objeto en amazon S3" />
+		 	</apex:pageBlockButtons>
+
+			<apex:pageBlockSection title="Archivo a cargar" columns="1">
+			
+				<br />
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Ruta final del archivo" />
+					<apex:outputText >
+						{!FileName}
+					</apex:outputText>
+				</apex:pageBlockSectionItem>
+				<br />
+			
+				
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Archivo a guardar" style="display:{!FileUploadVisible}"/>
+					<input type="file" size="70" name="file" accept='{!ContentType}' style='display:{!FileUploadVisible}'/>
+				</apex:pageBlockSectionItem>
+				<br />
+			
+			</apex:pageBlockSection>
+		</apex:pageBlock>	
+	</form>
+</apex:page>

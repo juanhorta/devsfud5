@@ -1,0 +1,3 @@
+<apex:page sidebar="false" showHeader="{!isHeader}" Controller="Loc.AllPointInNewMap"> 
+ <c:NewPointMapLeaflet allpoints="{!allphonelocate}" />
+</apex:page>

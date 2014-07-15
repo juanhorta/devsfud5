@@ -1,0 +1,292 @@
+<apex:page standardStylesheets="false" showHeader="true" sidebar="false" controller="Loc.LocateNewNow" tabStyle="Locate_Now__tab">
+
+<apex:outputPanel rendered="{!isPermitted == true}">
+<apex:stylesheet value="{!URLFOR($Resource.Loc__styles, 'styles.css')}" />
+    <apex:outputText style="font-size:16px; font-weight:normal; text-align:left;"   value="{!$Label.loc__MP_Page_LocateNow}"/>
+   <apex:messages />
+  <apex:form id="thefrom">
+   <apex:inputHidden value="{!mobphoneId}" id="mobphoneId"/>
+   <apex:inputHidden value="{!colorval}" id="cololrval"/>
+   <apex:actionfunction action="{!selmob}" name="selmob" reRender="updateColor" />
+   <apex:outputPanel id="thepanelalex">
+   <br/>
+    <div id="workstatusdiv"></div>`
+     <div align="left" style="width: 50px;">         
+     </div>
+     <br/>
+     <div style="width:100%" align="left">
+    <apex:dataTable value="{!innlocates}" var="pitem" rowClasses="odd,even" id="thedata" columnsWidth="5%,5%,20%,20%,40%,10%">
+            <apex:column title="Select">
+          
+             <apex:facet name="header">
+               <div align="center" >
+                 Select
+                </div>
+              
+            </apex:facet> 
+          
+                <apex:inputCheckbox value="{!pitem.isSelected}" id="check"/> 
+               
+          </apex:column>
+          <apex:column title="{!$Label.loc__Tower_Icon_mouseover}">
+              <apex:facet name="header">
+               <div title="{!$Label.loc__Tower_Icon_mouseover}" align="center">
+                   &nbsp;Icon
+                </div>
+              </apex:facet>
+              <div id="{!pitem.mobphone.id}" onclick="getmob(this)" style="cursor: pointer;">
+                <apex:image value="{!IF(pitem.mobphone.MapIconColor__c='1',$Resource.IconTowerBlue,
+                                     IF(pitem.mobphone.MapIconColor__c='2',$Resource.IconTowerRed,
+                                     IF(pitem.mobphone.MapIconColor__c='3',$Resource.IconTowerGreen,
+                                     IF(pitem.mobphone.MapIconColor__c='4',$Resource.IconTower00ffff,
+                                     IF(pitem.mobphone.MapIconColor__c='5',$Resource.IconTowercccccc,
+                                     IF(pitem.mobphone.MapIconColor__c='6',$Resource.IconTower30ff00,
+                                     IF(pitem.mobphone.MapIconColor__c='7',$Resource.IconTowerff8888,
+                                     IF(pitem.mobphone.MapIconColor__c='8',$Resource.IconTowere60066,
+                                     IF(pitem.mobphone.MapIconColor__c='9',$Resource.IconTowerfff000,
+                                     IF(pitem.mobphone.MapIconColor__c='10',$Resource.IconTower018c53,
+                                     IF(pitem.mobphone.MapIconColor__c='11',$Resource.IconTowerffa800,
+                                     IF(pitem.mobphone.MapIconColor__c='12',$Resource.IconTower905500,
+                                     IF(pitem.mobphone.MapIconColor__c='13',$Resource.IconTower990099,
+                                     IF(pitem.mobphone.MapIconColor__c='14',$Resource.IconTower000000,
+                                     IF(pitem.mobphone.MapIconColor__c='15',$Resource.IconTowerOrange,
+                                     $Resource.IconTowerBlue)))))))))))))))}" />
+              </div>
+          </apex:column>
+         
+          <apex:column >
+            <apex:facet name="header">
+               <div  align="center">
+                {!$Label.MP_Permission_Col_MobilePhoneName}
+                </div>
+            </apex:facet> 
+            <apex:outputText value="{!pitem.mobphone.name}"/>
+          </apex:column>
+        <apex:column >
+               <apex:facet name="header">
+               <div  align="center">
+                {!$Label.MP_Permission_Col_MobilePhoneNumber}
+                </div>
+            </apex:facet> 
+            <apex:outputText value="{!Text(pitem.mobphone.Loc__MobilePhoneNumberEnterebyUser__c)}"/>
+        </apex:column>  
+        <apex:column > 
+                <apex:facet name="header">
+               <div  align="center">
+                      {!$Label.MP_Locate_LastLocate}
+                </div>
+            </apex:facet> 
+              <apex:outputField value="{!pitem.locate.Loc__LocateTime__c}" rendered="{!pitem.locate.Loc__LocateStatus__c='FOUND'}"/>
+                <apex:outputField value="{!pitem.locate.LastModifiedDate}" rendered="{!NOT(pitem.locate.Loc__LocateStatus__c='FOUND')}" />
+                 <apex:outputText value="   |  " rendered="{!NOT(OR(pitem.locate.Loc__mAddressCity__c='',ISNULL(pitem.locate.Loc__mAddressCity__c),LEN(pitem.locate.Loc__mAddressCity__c)<2))}"/>
+                <apex:outputText value="{!pitem.locate.Loc__mAddressCity__c}" rendered="{!(pitem.locate.Loc__LocateStatus__c='FOUND')}"/>
+                <apex:outputText value=", " rendered="{!AND(NOT(OR(pitem.locate.Loc__mAddressZip__c='',ISNULL(pitem.locate.Loc__mAddressZip__c),LEN(pitem.locate.Loc__mAddressZip__c)<2)),NOT(OR(pitem.locate.Loc__mAddressCity__c='',ISNULL(pitem.locate.Loc__mAddressCity__c),LEN(pitem.locate.Loc__mAddressCity__c)<2)))}"/>
+                <apex:outputText value="{!pitem.locate.Loc__mAddressZip__c}" rendered="{!(pitem.locate.Loc__LocateStatus__c='FOUND')}"/>
+                <apex:outputText value="   |  " rendered="{!NOT(OR(pitem.locate.Loc__LocateStatus__c='',ISNULL(pitem.locate.Loc__LocateStatus__c),LEN(pitem.locate.Loc__LocateStatus__c)<2))}"/>
+                <apex:outputText value="{!pitem.locate.Loc__LocateStatus__c}" rendered="{!NOT(pitem.locate.Loc__LocateStatus__c='FOUND')}"/>
+                
+                <apex:outputPanel rendered="{!pitem.locate.Loc__LocateStatus__c='FOUND'}">                
+                   <apex:outputLink value="/apex/AMap_NewPage?id={!pitem.locate.id}" target="_blank">{!$Label.loc__Link_MapIt}</apex:outputLink>
+                </apex:outputPanel> 
+  
+                </apex:column>
+                
+            <apex:column rendered="{!allowLocate=true}" >
+                 <apex:facet name="header" >
+                 
+                     <apex:commandbutton value=" Locate " action="{!showPopup}" rerender="popupLocateNow,popupLocateNowError"  style="width:100px;height:30px;font-size:15px;" />
+                       
+                </apex:facet> 
+              
+            </apex:column>
+            
+            <apex:column rendered="{!allowLocate=false}" >
+                 <apex:facet name="header" >
+                 
+                      <apex:commandbutton value=" {!$Label.loc__LocateNotAvailable} " action="{!openErrorpop}" rerender="popupLocateNowError,thedata"  style="width:160px;height:30px;font-size:15px;" rendered="{!Not(allowLocate)}"/>
+                       
+                </apex:facet> 
+                
+            </apex:column>
+            
+    </apex:dataTable>
+    </div>
+    <br/>
+     
+    
+    <apex:outputPanel id="popupLocateNow">
+       <apex:outputPanel id="popupLocateNowError">
+        
+        <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayErrorPopUp}">
+            <br/>Error
+             <br/>
+                "{!errorMessage}"
+             <br/><br/>
+           
+             <apex:actionStatus id="statusActionManualyi1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                 <apex:commandLink value="OK" action="{!closeErrorpop}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                               <apex:commandLink value="OK" action="{!closeErrorpop}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                             
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+        </apex:outputPanel>
+    </apex:outputPanel>
+       <apex:messages />
+       
+        <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+            "{!$Label.loc__Link_LocateNow}"<br/>
+            "{!$Label.loc__Message_Locate_Now}" <br/><br/><br/>
+             <apex:actionStatus id="statusActionManualyi" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.Loc__loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                               <apex:commandLink value="Cancel" action="{!closePopup}" rerender="popupLocateNow" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi"/>
+                               <apex:commandLink value="OK" action="{!CreateLocateMobileRecord}" rerender="popupLocateNow" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi"/> 
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+           
+        </apex:outputPanel>
+    </apex:outputPanel>    
+    
+    <apex:outputPanel id="updateColor">
+    <apex:messages />
+        <apex:outputPanel styleClass="customPopup2" layout="block" rendered="{!displayPopUp2}">
+            <table>
+                <tr>
+                <td>Mobile Phone Name :<br/>" {!mobphone.Name} "</td>
+                <td>Mobile Phone Number :<br/>" {!Text(mobphone.Loc__MobilePhoneNumberEnterebyUser__c)} "</td>
+                </tr>
+                <apex:repeat value="{!vals}" var="v">
+                <tr>
+                <td><apex:inputCheckbox id="checks" title="{!v}" onchange="upcolor(this)"/></td>
+                <td align="left" style="text-align: left;">
+                <c:GetIconByColor mapvalue="{!v}"/>
+                </td>
+                </tr>
+                </apex:repeat>
+            </table>
+            <br/>
+            <apex:commandbutton value=" Save " action="{!upmob}"  reRender="thepanelalex" style="width:100px;height:30px;font-size:20px;" />
+            <apex:commandbutton value=" Cancel " action="{!closePopup2}" rerender="updateColor"  style="width:100px;height:30px;font-size:20px;" />
+        </apex:outputPanel>
+    </apex:outputPanel>
+    
+    
+       <!-- <c:PointMap allpoints="{!mobilephoneloactes}" />-->
+  <apex:iframe height="650px" src="{!mapurl}" scrolling="true" id="theIframe"/>
+    </apex:outputPanel>
+
+</apex:form>
+<script>
+    function allchecked(obj){
+            //alert(obj.checked);  
+            var inputs = document.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {  
+                var input = inputs.item(i);
+                if (input.type == "checkbox"&&(input.id.indexOf('check')!=-1)) {
+                       //alert(input.id);
+                     if(obj.checked==true){
+                        input.checked = true;
+                      }else{
+                        input.checked=false;
+                      }
+                }
+            }
+        }
+    function checkchecked(){
+      var flag=true;
+      var inputs = document.getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {  
+                var input = inputs.item(i);
+                if (input.type == "checkbox"&&(input.id.indexOf('check')!=-1)) {
+                       //alert(input.id);
+                     if(input.checked ==true){
+                        flag=false;
+                      }
+                }
+            }
+       if(flag){
+         alert("Please select at least one now!");
+         return false;
+       }
+       return true;
+    }
+    
+        function getmob(obj){
+            //alert(obj.id);
+            document.getElementById('{!$Component.thefrom.mobphoneId}').value=obj.id;
+            window.setTimeout(selmob,10);
+        }
+        function upcolor(obj){
+            //alert(obj.id);
+            var inputs = document.getElementsByTagName("input");
+            var checked = obj.checked;
+            for (var i = 0; i < inputs.length; i++) {  
+                var input = inputs.item(i);
+                if (input.type == "checkbox"&&(input.id.indexOf('checks')!=-1)) {
+                    if (input != obj) {
+                       if(obj.checked==true){
+                          input.checked = false;
+                        }
+                    }
+                }
+            }
+            document.getElementById('{!$Component.thefrom.cololrval}').value=obj.title;
+        }
+    </script>
+    
+    <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9998;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }  
+       .customPopup2{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            width: 300px;
+            height:790px;
+            margin-left: -250px;
+            top:10px;
+        }
+    </style>
+
+  <br/>
+  
+ </apex:outputPanel>
+<apex:outputPanel rendered="{!isPermitted == false}"> 
+    <apex:messages />        
+</apex:outputPanel>  
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

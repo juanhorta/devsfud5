@@ -1,0 +1,100 @@
+<apex:page showHeader="false" sidebar="false" standardController="Account" extensions="Loc.Chatter_Check_In_Out_Controller">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        var j$ = jQuery.noConflict();
+        
+        function success(position) {
+            var pos = position.coords;
+            setLocation(pos.latitude, pos.longitude, pos.accuracy);
+            showButton();
+        }
+        
+        function error(err) {
+            var mLocStatus;
+            var inputs = document.getElementsByTagName('input');
+            for(var x = 0; x < inputs.length; x++) {
+                if(inputs[x].id.indexOf('mLocationStatus') >= 0) { mLocStatus = inputs[x]; }
+            }
+            if (err.code == 1) {
+                // PERMISSION_DENIED, User said no.
+                mLocStatus.value = 'PERMISSION_DENIED';
+            } else if (err.code == 2) {
+                // POSITION_UNAVAILABLE, Network is down or satallites unavailable.
+                 mLocStatus.value = 'POSITION_UNAVAILABLE';
+            } else if (err.code == 3) {
+                // TIMEOUT, Network is up but it took too long to calculate the devices position.
+                mLocStatus.value = 'TIMEOUT';
+            } else {
+                mLocStatus.value = 'UNKNOWN';
+            }
+            showButton();
+        }
+        
+        j$(document).ready(function() {
+        
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                // DEVICE_NOT_SUPPORTED, Geolocation lookup not supported on this device.
+                document.getElementById("mLocationStatus").value = 'DEVICE_NOT_SUPPORTED';
+                showButton();
+            }
+            
+        });
+        
+        function setLocation(lat, lon, acc) {
+            var inputs = document.getElementsByTagName('input');
+            for(var x = 0; x < inputs.length; x++) {
+                if(inputs[x].id.indexOf('mLocationStatus') >= 0) { inputs[x].value = 'SUCCESS'; }
+                if(inputs[x].id.indexOf('mLatitude') >= 0) { inputs[x].value = lat; }
+                if(inputs[x].id.indexOf('mLongitude') >= 0) { inputs[x].value = lon; }
+                if(inputs[x].id.indexOf('mRadius') >= 0) { inputs[x].value = acc; }
+            }
+        }
+        
+        function showButton() {
+            j$('[id$=checkInButton]').show();
+        }
+    </script>
+    <apex:outputPanel id="checkInPanel">
+        <apex:form id="checkInForm">
+        
+        <apex:inputhidden value="{!mLocationStatus}" id="mLocationStatus" rendered="true"/>
+        <apex:inputhidden value="{!mLatitude}" id="mLatitude" rendered="true"/>
+        <apex:inputhidden value="{!mLongitude}" id="mLongitude" rendered="true"/>
+        <apex:inputhidden value="{!mRadius}" id="mRadius" rendered="true"/>
+        
+        <div id="ciContainer" style="width:100%;height:100px;text-align:center;">
+            <apex:pageMessages ></apex:pageMessages>
+            
+            <div style="float:none;text-align:center;width:100%;height:100%;padding-top:20px">
+                <apex:commandButton id="checkInButton" value="Check In" action="{!checkInAction}" rendered="{!NOT(isCheckedIn)}" rerender="checkInPanel" status="status" style="width:80px;height:30px;display:none;"/>
+                <apex:pageMessage summary="{!checkInMessage}" severity="confirm" strength="1" rendered="{!checkInMessage != ''}"/>
+            </div>
+            <!--
+            <div id="ciRightColumn" style="float:right; width:50%">
+                <apex:commandButton value="Check Out" action="{!checkOutAction}" rerender="checkInPanel" status="status" />
+                <apex:pageMessage summary="{!checkOutMessage}" severity="confirm" strength="1" rendered="{!checkOutMessage != ''}"/>
+            </div>
+             -->
+        </div>
+        
+         <!-- 
+        <div id="ciContainer" style="width:100%">
+        <apex:pageMessages ></apex:pageMessages>
+        
+        <div id="ciLeftColumn" style="float:left; width:50%">
+            <apex:pageMessage summary="CheckIn Saved" severity="confirm" strength="1" rendered="{!event.Check_In__c}"/>
+            <apex:commandButton value="Check In" action="{!checkInSimple}" rerender="checkInPanel" status="status" rendered="{!!event.Check_In__c}"/>
+        </div>
+        
+        <div id="ciRightColumn" style="float:right; width:50%">
+            <apex:pageMessage summary="Already Checked Out." severity="confirm" strength="1" rendered="{!event.Check_Out__c}"/>
+            <apex:commandButton value="Check Out" action="{!checkOutSimple}" rerender="checkInPanel" status="status" rendered="{!!event.Check_Out__c}"/>
+        </div>
+         
+        </div>
+         -->
+        </apex:form>
+    </apex:outputPanel>
+</apex:page>

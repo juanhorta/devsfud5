@@ -1,0 +1,15 @@
+<apex:page standardController="Archivo_amazon_s3__c" extensions="CTR002_PreviewS3File">
+	<apex:pageMessages />
+	<script>
+		if('{!Archivo_amazon_s3__c.Es_carpeta__c}' == 'false'){
+			window.location.href="https://s3.amazonaws.com/{!Archivo_amazon_s3__c.Bucket__c}/{!Archivo_amazon_s3__c.Ubicacion_archivo__c}/{!Archivo_amazon_s3__c.Tipo_contenido__c}/{!Archivo_amazon_s3__c.Codigo_archivo__c}_{!Archivo_amazon_s3__c.Name}.{!Archivo_amazon_s3__c.Extension_archivo__r.Extension__c}";
+		}
+	</script>	
+	<ul>
+	<apex:repeat value="{!AWSobjectList}" var="o">
+		<li>
+			<a href='{!o.strUrl}' target='_blank'>{!o.strLabel}</a>
+		</li>
+	</apex:repeat>
+	</ul>
+</apex:page>

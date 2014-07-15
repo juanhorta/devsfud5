@@ -1,0 +1,239 @@
+<apex:page id="pageAdmBil"  standardController="Dato_facturacion__c" extensions="CTR006_UpsertBillingData" action="{!LoadPage}" tabStyle="Account" showHeader="true" renderAs="">
+<script language='javascript' type='text/javascript'>
+   function saveBillingData(){
+   
+           Inicioprocess()
+        
+    }
+
+
+</script>
+    
+    <apex:pageMessages id="idPM2" ></apex:pageMessages>
+    <apex:form id="formBillingData" style="overflow x:hidden;width:1024px;">
+         <!-- *******************************LLAMADO AL SW MD******************************* -->
+         <apex:actionFunction id="Inicioprocess"  name="Inicioprocess" action="{!UpsertBillingInfo}" status="loadingStatus" oncomplete="{{!IF(datofactok,'ServiceMasterdata()','MSGerrorName()')}}" reRender="pageAdmBil:formBillingData"/>
+         <apex:actionFunction id="ServiceMasterdata"  name="ServiceMasterdata" action="{!SWMasterdata}" status="loadingStatus" />
+         <apex:actionFunction id="MSGerrorName"  name="MSGerrorName" action="{!MSGerror}" status="loadingStatus"/>
+         
+         <apex:actionStatus id="loadingStatus">
+                <apex:facet name="start">
+                   <c:Loading Titulo="Procesando"
+                   Subtitulo="Este proceso tardara unos segundos..." numeroImagen="3" />
+                </apex:facet>
+         </apex:actionStatus>
+        
+         
+        <apex:pageBlock tabStyle="Account"  title="" mode="edit">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton onClick="saveBillingData();return false;" value="Guardar" id="btnGo" status="loadingStatus" reRender="pageAdmBil:formBillingData"  />
+              <!---  </apex:commandButton>  --->
+                
+                <a href="/{!Dato_facturacion__c.Presupuesto__c}">Atras</a>
+            </apex:pageBlockButtons> 
+        
+            <apex:pageBlockSection title="Propiedades de facturación" columns="2">
+                
+                <!-- 1 -->
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Nombre factura"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Name}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem > 
+                    <apex:outputLabel value="Ciudad facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Ciudad_facturacion__c}" required="false"/>
+               </apex:pageBlockSectionItem>
+                
+                
+                <!-- 2 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Nombre Cotización"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Presupuesto__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Dirección facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Direccion_facturacion__c}" required="false"/>
+                </apex:pageBlockSectionItem>
+                
+                <!-- 3 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Razón social"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Razon_social__c}" required="false"/>
+                </apex:pageBlockSectionItem>                
+
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Ciudad teléfono facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Ciudad_telefono_facturacion__c}" required="false"/>
+                </apex:pageBlockSectionItem>
+                
+                <!-- 4  -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Tipo identificación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Tipo_identificacion__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Teléfono contacto financiero"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Telefono_contacto_financiero__c}" required="false"/>
+                </apex:pageBlockSectionItem>
+                
+                <!-- 5 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Número identificación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Numero_identificacion__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Celular"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Celular__c}"/>
+                </apex:pageBlockSectionItem>
+
+                <!-- 6 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Fecha primera cuota"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Fecha_primera_cuota__c}" required="true"/>
+                </apex:pageBlockSectionItem>                
+                                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Correo facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Correo_facturacion__c}" required="false"/>
+                </apex:pageBlockSectionItem>                
+                
+                <!-- 7 -->
+               
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Agente facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Agente_facturacion__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <!-- 8 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Cuota normalizada"/>
+                    <apex:outputField value="{!Dato_facturacion__c.Cuota_normalizada__c}"/>
+                </apex:pageBlockSectionItem>                
+
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Agente recaudo"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Agente_recaudo__c}" required="true">
+                    <apex:actionSupport event="onchange"  reRender="pageAdmBil:formBillingData" status="loadingStatus" action="{!renderagrecaudo}" /> 
+                    </apex:inputField>  
+                </apex:pageBlockSectionItem>                
+                
+                <!-- 9 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Valor facturación"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Valor_facturacion__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Valor facturación faltante"/>
+                    <apex:outputLabel value="{!MaxBillingValue}"/>
+                </apex:pageBlockSectionItem>   
+
+                 <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="NIE" rendered="{!renderNie}"/>
+                    <apex:inputField value="{!Dato_facturacion__c.NIE__c}" rendered="{!renderNie}"/>
+                </apex:pageBlockSectionItem>  
+             
+             </apex:pageBlockSection>   
+             
+             <apex:pageBlockSection title="Actualizar Información desde Masterdata" columns="1">   
+                <apex:pageBlockSectionItem >  
+                <apex:outputLabel value="Digite una identificación y marque el check la información del Dato de Facturación se autocompletará por la de la identificación diligenciada"/>
+             </apex:pageBlockSectionItem>               
+                <apex:pageBlockSectionItem >  
+                                
+                    <apex:outputLabel value="Autocompletar a partir de la identificación"/>
+                    <apex:inputCheckbox value="{!autocomplete}"> 
+                    <apex:actionSupport event="onchange"  reRender="pageAdmBil:formBillingData" status="loadingStatus" action="{!autocompleteinf}" /> 
+                    </apex:inputCheckbox> 
+                 </apex:pageBlockSectionItem> 
+             </apex:pageBlockSection> 
+            
+        </apex:pageBlock> 
+        
+         
+    
+            <!-- JAAR 17-02-2014 **************** Block section Tipo de facturacion************************************* -->  
+             <apex:pageBlock id="tipofactpb" mode="edit" title="Tipo de facturación">   
+                <apex:pageBlockSection id="tipofact" columns="2" rendered="true" collapsible="true">  
+                     <apex:pageBlockSectionItem > 
+                         <apex:outputLabel value="Seleccione el tipo de facturación:"/>
+                         <apex:inputField value="{!Dato_facturacion__c.billing_type__c}" required="true" >   
+                         <apex:actionSupport event="onchange"  reRender="pageAdmBil:formBillingData" status="loadingStatus" action="{!renderpage}" />  
+                         </apex:inputField>
+                     </apex:pageBlockSectionItem> 
+                 </apex:pageBlockSection> 
+             </apex:pageBlock>   
+            <!-- *********************************Facturacion por vigencias********************************************** -->  
+              <apex:pageBlock id="Factxvigencias" mode="edit" >   
+                <apex:pageBlockSection id="vigencia" title="Facturación por vigencia" columns="6"  collapsible="true" rendered="{!rendervigencias}">  
+                     
+                    <apex:pageBlockTable columns="10" value="{!QuoteLineIteminf}" var="QuoteLine"  >
+                        <apex:column value="{!QuoteLine.PricebookEntry.Product2.Name}" headerValue="Nombre del producto"  />
+                        <apex:column value="{!QuoteLine.PricebookEntry.Product2.ProductCode }" headerValue="Código del producto"  />
+                        <apex:column value="{!QuoteLine.TotalPrice  }" headerValue="Precio total"  />
+                        <apex:column >
+                            <apex:facet name="header">Numero de cuotas</apex:facet>
+                            <apex:inputField value="{!QuoteLine.Numberquota__c}" id="Numberquota" required="{!requiredvigencias}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>  
+                    
+                 </apex:pageBlockSection> 
+             </apex:pageBlock>   
+            
+            <!-- *********************************Facturacion por cuotas Iguales********************************************** -->  
+              <apex:pageBlock id="Factxcuotas" mode="edit" >   
+                <apex:pageBlockSection id="Cuotas" title="Facturación por cuotas iguales" columns="1"  collapsible="true" rendered="{!rendercuotas}">  
+                    <apex:outputLabel value="Recuerde que al seleccionar esta opcion todos los productos se facturaran con el mismo numero de cuotas"/>
+                    <apex:inputField value="{!Dato_facturacion__c.Numero_cuotas__c}" required="{!requiredcuotas}"/>
+                 </apex:pageBlockSection> 
+             </apex:pageBlock> 
+            
+            
+            
+            <!-- ******************************************************************************************************** -->  
+         <apex:pageBlock id="cuotas" mode="edit">       
+            <div style="display:{!DisplayQuote}">
+                <apex:pageBlockSection title="Cuotas de facturación" columns="1" rendered="true">
+                    <apex:pageBlockTable value="{!QuoteInfo}" var="qinf">
+                        <apex:column >
+                            <apex:inputHidden id="QuoteObjectId" value="{!qinf.id}"/>
+                            <apex:inputHidden id="QuoteLineItemId" value="{!qinf.Partida_de_presupuesto__c}"/>
+                            <apex:inputHidden id="QuoteNumber" value="{!qinf.No_Cuota__c}"/>
+                        </apex:column>
+                        <apex:column value="{!qinf.No_Cuota__c}"/>
+                        <apex:column >
+                            <apex:facet name="header">Producto por cotización</apex:facet>
+                            <apex:outputLink value="/{!qinf.Partida_de_presupuesto__c}">{!qinf.Partida_de_presupuesto__r.PricebookEntry.Product2.Name}</apex:outputLink>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Producto</apex:facet>
+                            <apex:outputLink value="/{!qinf.Partida_de_presupuesto__r.PricebookEntry.Product2.Id}">{!qinf.Partida_de_presupuesto__r.PricebookEntry.Product2.ProductCode}</apex:outputLink>
+                        </apex:column>
+                        <apex:column rendered="{!rendercespeciales}" >
+                            <apex:facet name="header">Valor cuota</apex:facet>
+                            <apex:inputField value="{!qinf.Valor_cuota__c}" id="Field_QuoteValue" required="true" />
+                        </apex:column>
+                        <apex:column rendered="{!rendervalores}" >
+                            <apex:facet name="header">Valor cuota</apex:facet>
+                            <apex:outputField value="{!qinf.Valor_cuota__c}"  />
+                        </apex:column>
+                        <apex:column rendered="{!rendercespeciales}">
+                            <apex:facet name="header">Fecha cuota</apex:facet>
+                            <apex:inputField value="{!qinf.Fecha_cuota__c}" id="Field_QuoteDate" required="true" />
+                        </apex:column>   
+                         <apex:column rendered="{!rendervalores}">
+                            <apex:facet name="header">Fecha cuota</apex:facet>
+                            <apex:outputField value="{!qinf.Fecha_cuota__c}"  />
+                        </apex:column>                      
+                    </apex:pageBlockTable>          
+                </apex:pageBlockSection>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

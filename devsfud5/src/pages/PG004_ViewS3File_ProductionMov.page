@@ -1,0 +1,6 @@
+<apex:page standardController="Archivo_por_movimiento_produccion__c">
+	<apex:pageMessages />
+	<script type="text/javascript">
+		document.location = '/{!Archivo_por_movimiento_produccion__c.Archivo_amazon_s3__c}';
+	</script>
+</apex:page>

@@ -1,0 +1,210 @@
+<apex:page >
+
+<!-- BOT 1/oct
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" standardController="MobilePhone__c"   extensions="NewMobilePhoneExtension" recordSetVar="mobilephones">
+<apex:form id="theform">
+    
+    
+    <apex:actionFunction name="showp" action="{!showPopup}" rerender="popupRegisterPhone" />
+    <apex:actionfunction action="{!refreshPage}" name="refreshPage" />
+    <script>
+        function chek(){
+            //alert(obj.id);
+            //var objid=obj.id;
+            //var numid=objid.replace('clic','num');
+            var numid='{!$Component.theform.tab}';
+            //alert(numid);
+            var v=document.getElementById(numid+':0:num').value;
+            //alert(v.value);
+            var n=document.getElementById(numid+':0:name').value;
+            if(n==null||n==''||n.length>20){
+               alert("{!$Label.Error_input_name}");
+            }
+            if(v!=null && v!='' && v.length==10){
+                if(!isNaN(v)){
+                    //alert('d');
+                    window.setTimeout(showp,10);
+                }else{
+                    alert("{!$Label.Error_input_phone}");
+                }
+            }else{
+                alert("{!$Label.Error_input_phone}");
+            }
+        }
+    </script>
+    <apex:stylesheet value="{!URLFOR($Resource.styles, 'styles.css')}" /> -->
+    <!-- Begin Default Content REMOVE THIS -->
+   <!-- BOT 1/oct <apex:outputText style="font-size:16px; font-weight:bold ;align:left; vertical-align: middle"  value="{!$Label.Add_new}"/>
+    <apex:image id="SMS" value="{!$Resource.SMS}" style="align: right;" width="50" height="46"/>
+    <apex:image id="MobileUser" value="{!$Resource.MobileUser}" style="align: left;" width="47" height="46"/>
+
+        <apex:dataTable value="{!NewMobilePhoneRecords}" var="pitem" rowClasses="odd,even" id="tab">
+            <apex:column headerValue="{!$Label.MP_Permission_Col_MobilePhoneName}">
+                <apex:inputField value="{!pitem.name}" id="name"/>
+            </apex:column>
+            <apex:column headerValue="{!$Label.MP_Permission_Col_MobilePhoneNumber}" id="col">
+                <apex:inputField value="{!pitem.MobilePhoneNumberEnterebyUser__c}" id="num"/>
+            </apex:column>  
+            <apex:column headerValue="{!$Label.MP_col_note}">
+                <apex:outputText value="{!$Label.MP_Note}"/>
+            </apex:column>  
+            <apex:column headerValue="{!$Label.MP_Permission_Col_Permission}"> -->
+            <!-- 
+                <apex:commandLink value="{!$Label.Link_RequestPermission}" action="{!showPopup}" rerender="popupRegisterPhone" id="clic" onclick="return chek(this)"/>
+             -->
+ <!-- BOT 1/oct               <a href="#" onclick="chek()">{!$Label.Link_RequestPermission}</a>
+            </apex:column>
+        </apex:dataTable>
+        
+        <apex:outputText style="margin-left; font-size:12px; font-style:italic ; font-weight:normal" value="{!$Label.MP_Note_NewPhone}" />
+        <apex:outputPanel id="popupLocateNowError">
+        
+        <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayErrorPopUp}">
+            <br/>
+            "{!errorMessage}" <br/><br/><br/>
+           
+             <apex:actionStatus id="statusActionManualyi1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                               <apex:commandLink value="OK" action="{!closeErrorpop}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                             
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+        </apex:outputPanel>
+    </apex:outputPanel>
+        <apex:outputPanel id="popupRegisterPhone">
+            <script>
+                   var flag={!isoption};
+                   var uniqueflag={!isUnique};
+                   if({!is006}){
+                      alert("{!$Label.Error_input_mobilephone}");
+                   }
+                   if(uniqueflag&&flag&&{!not(is006)}){
+                       window.parent.location.href="/apex/IncludeVFPages?sfdc.tabName=01r80000000HgKp";
+                   }
+               </script>
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.Link_RequestPermission}"<br/>
+                "{!$Label.Message_Optin}" <br/><br/><br/>
+              
+                
+               <apex:actionStatus id="statusActionManual1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterPhone" status="statusActionManual1"/>
+                                      <apex:outputText value="   " />
+                                <apex:commandButton value="{!$Label.Link_RequestPermission}" action="{!potin}" rerender="popupRegisterPhone,popupLocateNowError" status="statusActionManual1"/>
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+               
+            </apex:outputPanel>
+             <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!Not(isUnique)}">
+                <br/>
+                {!message} <br/><br/><br/>
+               <div> -->
+               <!-- 
+                 <table width="100%">
+                    <tr>
+                      <td>
+                       <apex:outputField value="{!mp.Name}" />
+                      </td>
+                      <td>
+                       <apex:outputField value="{!mp.MobilePhoneNumber__c}" />
+                      </td>
+                      <td>
+                        <apex:outputField value="{!mp.Registration_Status__c}" />
+                       </td>
+                     </tr>
+                   </table> -->
+   <!-- BOT 1/oct                <apex:actionStatus id="statusActionManuaa" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                                <apex:commandButton value="Ok" action="{!closePopup}" rerender="popupRegisterPhone" status="statusActionManuaa"/>
+                                      
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+                </div>
+               
+               
+            </apex:outputPanel>
+        
+        </apex:outputPanel>   
+          
+         <apex:outputPanel id="popupRegisterStatus">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                Check Phone Registration Status<br/>
+                Inform user a status check was sent <br/><br/><br/><br/>
+                <apex:commandButton value="OK" action="{!closePopup}" rerender="popupRegisterStatus"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+ 
+        <apex:outputPanel id="popupRegisterCancel">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.Link_CancelPermission}"<br/>
+                "{!$Label.Message_Optout}" <br/><br/><br/>
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterCancel"/>
+                <apex:outputText value="   " />
+                <apex:commandButton value="{!$Label.Link_CancelPermission}" action="{!closePopup}" rerender="popupRegisterCancel"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        
+        <apex:outputPanel id="popupDeleteAll">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.Link_Delete}"<br/>
+                "{!$Label.Message_Delete_All}" <br/><br/><br/>
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupDeleteAll"/>
+                <apex:outputText value="   " />
+                <apex:commandButton value="{!$Label.Link_Delete}" action="{!closePopup}" rerender="popupDeleteAll"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+ 
+ 
+    </apex:form>
+ 
+    <style type="text/css">
+       .customPopup{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            top:100px;
+        }
+    </style>
+
+  <br/>-->
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

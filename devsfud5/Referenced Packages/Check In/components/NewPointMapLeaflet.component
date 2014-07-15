@@ -1,0 +1,198 @@
+<apex:component controller="Loc.NewPointMap">
+   
+   <apex:attribute name="allpoints" description="points" type="Loc__Locate_Mobile_Phone__c[]" assignTo="{!lomobs}"/>
+   <apex:attribute name="point" description="points" type="Loc__Locate_Mobile_Phone__c" assignTo="{!lomob}"/>
+   <apex:attribute name="type" description="pointstype" type="String" assignTo="{!typeg}"/> 
+
+  <apex:pageBlock title="Map({!inlocs.size})">
+  <div id="AMap_wrapper" style="height: 500px; margin: 10px auto;">
+        <div class="panel" id="AMap_mapContainer" style="height: 500px; margin: 0 auto;"></div>
+
+		<apex:stylesheet value="{!URLFOR($Resource.Loc__Leaflet, '/leaflet.css')}"/>
+		<apex:includeScript value="{!URLFOR($Resource.Loc__Leaflet, '/leaflet.js')}"/>	
+		<apex:stylesheet value="{!URLFOR($Resource.Loc__MapContextMenu, '/Leaflet.contextmenu-master/dist/leaflet.contextmenu.css')}"/>
+		<apex:includeScript value="{!URLFOR($Resource.Loc__MapContextMenu, '/Leaflet.contextmenu-master/dist/leaflet.contextmenu.js')}"/>		
+        <script type="text/javascript" src="{!$Resource.MapTextPath}"></script>
+        <script type="text/javascript" src="{!$Resource.dateScript}"></script>
+		<apex:includeScript value="{!$Resource.Loc__PhoneInfoJs}"/>	  
+		<script src="{!mapquestApiUrl}?key={!mapquestApiKey}"></script>		      
+
+ 
+ <script type="text/javascript">    
+			function getPhoneColor (color) {
+             	if (color == '1') return "Blue";
+                if (color == '2') return "Red";
+                if (color == '3') return "Green";
+                if (color == '4') return "#00ffff";
+                if (color == '5') return "#cccccc";
+                if (color == '6') return "#30ff00";
+                if (color == '7') return "#ff8888";
+                if (color == '8') return "#e60066";
+                if (color == '9') return "#fff000";
+                if (color == '10') return "#018c53";
+                if (color == '11') return "#ffa800";
+                if (color == '12') return "#905500";
+                if (color == '13') return "#990099";
+                if (color == '14') return "#000000";
+                if (color == '15') return "Orange";
+	            return "Blue";	
+            }
+                           
+			function getIconUrl (tech,color) {
+				if (tech == 'A-GPS') {
+	             	if (color == '1') return "{!$Resource.IconMobileBlue}";
+	                if (color == '2') return "{!$Resource.IconMobileRed}";
+	                if (color == '3') return "{!$Resource.IconMobileGreen}";
+	                if (color == '4') return "{!$Resource.IconMobile00ffff}";
+	                if (color == '5') return "{!$Resource.IconMobilecccccc}";
+	                if (color == '6') return "{!$Resource.IconMobile30ff00}";
+	                if (color == '7') return "{!$Resource.IconMobileff8888}";
+	                if (color == '8') return "{!$Resource.IconMobilee60066}";
+	                if (color == '9') return "{!$Resource.IconMobilefff000}";
+	                if (color == '10') return "{!$Resource.IconMobile018c53}";
+	                if (color == '11') return "{!$Resource.IconMobileffa800}";
+	                if (color == '12') return "{!$Resource.IconMobile905500}";
+	                if (color == '13') return "{!$Resource.IconMobile990099}";
+	                if (color == '14') return "{!$Resource.IconMobile000000}";
+	                if (color == '15') return "{!$Resource.IconMobileOrange}";
+	                return "{!$Resource.IconMobileBlue}";	                
+                } else {
+ 	             	if (color == '1') return "{!$Resource.IconTowerBlue}";
+	                if (color == '2') return "{!$Resource.IconTowerRed}";
+	                if (color == '3') return "{!$Resource.IconTowerGreen}";
+	                if (color == '4') return "{!$Resource.IconTower00ffff}";
+	                if (color == '5') return "{!$Resource.IconTowercccccc}";
+	                if (color == '6') return "{!$Resource.IconTower30ff00}";
+	                if (color == '7') return "{!$Resource.IconTowerff8888}";
+	                if (color == '8') return "{!$Resource.IconTowere60066}";
+	                if (color == '9') return "{!$Resource.IconTowerfff000}";
+	                if (color == '10') return "{!$Resource.IconTower018c53}";
+	                if (color == '11') return "{!$Resource.IconTowerffa800}";
+	                if (color == '12') return "{!$Resource.IconTower905500}";
+	                if (color == '13') return "{!$Resource.IconTower990099}";
+	                if (color == '14') return "{!$Resource.IconTower000000}";
+	                if (color == '15') return "{!$Resource.IconTowerOrange}";  
+	                return "{!$Resource.IconTowerBlue}";             
+                }		
+			}
+			           
+            function generateAddress(house,street,city,postcode,country){
+                var addressAll="";
+                if(house!=null&&house!=""&&house!="Not available"){
+                   addressAll+="house:"+house+";";
+                }
+                if(street!=null&&street!=""&&street!="Not available"){
+                   addressAll+="street:"+street+";";
+                }
+                if(city!=null&&city!=""&&city!="Not available"){
+                   addressAll+="city:"+city+";";
+                }
+                if(postcode!=null&&postcode!=""&&postcode!="Not available"){
+                   addressAll+="postcode:"+postcode+";";
+                }
+                if(country!=null&&country!=""&&country!="Not available"){
+                   addressAll+="country:"+country+";";
+                }
+                return addressAll;
+            }
+            
+			 function getInfoContent (params) {
+			 	var infoContent = "";
+				for(key in params) {
+					infoContent += "<p>" + key + ": " + params[key] + "</p>";
+				}
+				return infoContent;
+			 }
+			 
+			 function toggleCircles() {
+			 	if (circlesOn) {
+					for (index in circles) {
+						map.removeLayer(circles[index]);
+					}
+					circlesOn = false;
+				} else {
+					for (index in circles) {
+						map.addLayer(circles[index]);
+					}
+					circlesOn = true;				
+				}
+			 }			 
+			 
+        var phoneInfo = new PhoneInfo (); 
+        var latLngs = [];         
+        var circles = [];
+        var markers = [];      
+        var circlesOn = true;     
+		var phoneColor = "";      
+       var map = L.map('AMap_mapContainer', {
+            layers: MQ.mapLayer(),
+		    contextmenu: true,
+		    contextmenuWidth: 200,
+		    contextmenuItems: [{
+		        text: 'Toggle Circles On/Off',
+		        callback: toggleCircles
+		    }]
+        });
+        L.control.layers({
+		    'Map': MQ.mapLayer(),
+		    'Satellite': MQ.satelliteLayer(),
+		    'Hybrid': MQ.hybridLayer()
+		}).addTo(map);        
+		L.control.scale({position:'bottomleft'}).addTo(map);
+		        
+<apex:repeat value="{!inlocs}" var="Mob">  
+	  phoneColor = getPhoneColor ("{!Mob.color}");
+      var lat="{!Mob.point.mLatitude__c}";
+      var lon="{!Mob.point.mLongitude__c}";
+      var rad="{!Mob.point.mRadius__c}";
+
+      if(lat!=null&&lon!=null&&rad!=null&&lat!=""&&lon!=""&&rad!=""){  
+           var acctId = "{!Mob.point.Record_Id__c}";         
+           if (acctId == "") {
+       		  var iconUrl = getIconUrl("{!Mob.point.Technology__c}","{!Mob.color}");           
+	          var infoParams = {Name: "{!Mob.point.Register_Mobile_Phone__r.Name}",
+	          Phone: "{!Mob.point.MobilePhone_Number__c}",
+	          Date: "{!Mob.dt}",
+	          Radius: "{!Mob.point.mRadius__c}"};    
+           } else {
+           	  var iconUrl = "{!$Resource.IconDefaultMapMarker}";
+              var infoParams = {Account: "{!JSENCODE(Mob.point.mAddressAll__c)}",
+              Address: "{!JSENCODE(Mob.point.mAddressStreet__c)}, {!JSENCODE(Mob.point.mAddressCity__c)}" };           	                
+           }        
+            var myIcon = L.icon({
+                iconUrl: iconUrl,
+                iconSize: [32,32],
+                iconAnchor: [16,16]   
+            });
+            var latLng = [lat,lon];
+            latLngs.push(latLng);             
+            var marker = L.marker(latLng, {icon: myIcon}); 
+            markers.push(marker);
+            var circOptions = {
+            	stroke:true,
+            	color: phoneColor,
+            	weight:2,
+            	opacity: 0.75,
+            	fill:true,
+            	fillOpacity:0.2,
+            	fillColor: phoneColor
+            };
+            circle = L.circle([lat,lon],rad,circOptions); 
+            circles.push(circle);        
+           var popupContent = getInfoContent(infoParams);
+           marker.bindPopup(popupContent); 
+           
+ 		   phoneInfo.storePhoneInfo(lat, lon, infoParams, phoneColor);                       
+        }        
+</apex:repeat>
+
+	map.fitBounds(latLngs, {padding: [10,10]});
+	var markerGroup = L.layerGroup(markers).addTo(map);  
+	var circleGroup = L.layerGroup(circles).addTo(map); 	
+	phoneInfo.drawPolylines (map); 
+  
+        </script>
+       
+    </div>
+    </apex:pageBlock>
+</apex:component>

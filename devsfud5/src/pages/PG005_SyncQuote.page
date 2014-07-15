@@ -1,0 +1,24 @@
+<apex:page standardController="Quote" extensions="CTR005_SyncQuote">
+
+	<apex:pageMessages />
+	<apex:form id="formFileOpportunitySave">
+		<apex:pageBlock title="" mode="edit">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!StartSync}" value="Iniciar sincronización" >
+				</apex:commandButton>
+				<a href='/{!CurrentQuoteId}'>Cancelar</a>
+			</apex:pageBlockButtons>
+			<p>Antes de realizar la sincronización de cotización <b>{!Quote.Name}</b> con la oportunidad tenga en cuenta:</p>
+			<br/>
+			<ul>
+				<li>Una cotización sincronizada no puede ser modificada.</li>
+				<li>Solo una cotización puede estar sincronizada a la vez.</li>
+				<li>La oportunidad debe estar en un estado anterior a Cerrada Entregada.</li>
+				<li>Si alguno de los productos tiene un porcentaje de descuento superior al permitido, la cotización debe tener una aprobación.</li>
+				<li>Si hay productos de venta limitada en la cotización debe tener un token de publicidad valido relacionado.</li>				
+				<li>Si la cotización posee un token de venta en linea solo puede tener una factura a una cuota.</li>
+				<li>Si la oportunidad es una renovacion por lo menos un producto debe estar como renovado.</li>
+			</ul> 		
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

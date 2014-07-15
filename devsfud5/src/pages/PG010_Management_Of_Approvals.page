@@ -1,0 +1,100 @@
+<apex:page Controller="CTR010_Management_Of_Approvals"  id="page1" showheader="true" sidebar="false" action="{!lanzarProceso}" >
+    <script>
+    function cerrar() {
+        top.window.close();
+    }
+  </script> 
+    
+
+    <head>
+        <title>Solicitud de aprobación</title> 
+    </head>
+    <apex:sectionHeader title="Solicitud de aprobación" />
+    <apex:pageMessages id="idPM2" ></apex:pageMessages>
+     <apex:form id="formAproval">
+         <apex:pageBlock id="Block2" tabStyle="Product2" Title="Aprobar/Rechazar solicitud de aprobación"   >
+            
+            <apex:pageBlockSection title="Aprobación Cartera" columns="2" rendered="{!ApprovalCartera}" > 
+                          <!-- 1 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Nombre de la oportunidad:" lang=""/>
+                    <apex:outputLink value="/{!oppcheck.id}">{!oppcheck.Name}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 2 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Usuario logueado actualmente:"/>
+                    <apex:outputLabel value="{!userName}"/>
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 3 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Propietario de la oportunidad:"/>
+                        <apex:outputField value="{!oppcheck.Owner.Name}"  />
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 4 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Perfil del actual aprobador:"/>
+                        <apex:outputLabel value="{!strProfile.Name}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Comentarios: "/>
+                     <apex:inputTextarea value="{!Reqfinancial.Comentarios__c}" label="Comentarios"  rows="5" cols="100"/> 
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!--------------------------------------------------------------------------------------------------------------->
+            <apex:pageBlockSection title="Aprobación fulfillment" columns="2" rendered="{!ApprovalFulfillment}" > 
+                          <!-- 1 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Nombre de la oportunidad:" lang=""/>
+                    <apex:outputLink value="/{!oppcheck.id}">{!oppcheck.Name}</apex:outputLink>
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 2 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Usuario logueado actualmente:"/>
+                    <apex:outputLabel value="{!userName}"/>
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 3 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Propietario de la oportunidad:"/>
+                        <apex:outputField value="{!oppcheck.Owner.Name}"  />
+                </apex:pageBlockSectionItem>
+                
+                     <!-- 4 -->
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Perfil del actual aprobador:"/>
+                        <apex:outputLabel value="{!strProfile.Name}"/>
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Comentarios: "/>
+                     <apex:inputTextarea value="{!gestionfull.Comments_fulfillment__c}" label="Comentarios"  rows="5" cols="80"/> 
+                </apex:pageBlockSectionItem>
+            
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Causales de devolución: "/>
+                     <apex:inputField value="{!gestionfull.Causes_of_return__c}" label="Causales de devolución:" /> 
+                </apex:pageBlockSectionItem>
+                
+            </apex:pageBlockSection>
+             
+           <apex:pageBlockButtons >
+          
+                <apex:commandButton action="{!doApproval}" value="Aprobar"  />
+                 
+               <apex:commandButton action="{!doCancel}" value="Cancelar"  />
+                 <apex:commandButton action="{!doReject}" value="Rechazar"  />
+              <!---  </apex:commandButton>  --->
+               
+            </apex:pageBlockButtons> 
+          
+         </apex:pageBlock>
+         
+     </apex:form>
+  
+</apex:page>

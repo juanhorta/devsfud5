@@ -1,0 +1,5 @@
+<apex:page cache="false" showHeader="true" title="Register Mobile Phone">
+      <apex:form >
+            <apex:detail />
+      </apex:form>
+</apex:page>

@@ -1,0 +1,21 @@
+<apex:component Controller="Loc.GetIconByColor">
+   	<apex:attribute name="mapvalue" description="MapIconColor" type="String" assignTo="{!val}"/>	
+   	<div>
+   		<apex:image value="{!IF(mapvalue='1',$Resource.IconTowerBlue,
+                                     IF(mapvalue='2',$Resource.IconTowerRed,
+                                     IF(mapvalue='3',$Resource.IconTowerGreen,
+                                     IF(mapvalue='4',$Resource.IconTower00ffff,
+                                     IF(mapvalue='5',$Resource.IconTowercccccc,
+                                     IF(mapvalue='6',$Resource.IconTower30ff00,
+                                     IF(mapvalue='7',$Resource.IconTowerff8888,
+                                     IF(mapvalue='8',$Resource.IconTowere60066,
+                                     IF(mapvalue='9',$Resource.IconTowerfff000,
+                                     IF(mapvalue='10',$Resource.IconTower018c53,
+                                     IF(mapvalue='11',$Resource.IconTowerffa800,
+                                     IF(mapvalue='12',$Resource.IconTower905500,
+                                     IF(mapvalue='13',$Resource.IconTower990099,
+                                     IF(mapvalue='14',$Resource.IconTower000000,
+                                     IF(mapvalue='15',$Resource.IconTowerOrange,
+                                     $Resource.IconTowerBlue)))))))))))))))}"/>
+   	</div>
+</apex:component>

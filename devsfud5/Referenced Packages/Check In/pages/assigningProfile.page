@@ -1,0 +1,40 @@
+<apex:page controller="Loc.AssignController" action="{!dataFill}">
+    
+    <script type="text/javascript" src="https://www.shawnolson.net/scripts/public_smo_scripts.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    
+    <apex:form >
+         <table align="center" width="65%">
+            <tr>
+                <td align="center"><strong>Assigning to '{!profileName}' profile...</strong></td>
+            </tr>             
+            <tr>
+                <td>
+                    <apex:pageBlock >
+                        <apex:pageBlockTable value="{!newAssignedUsers}" var="n">
+                            <apex:column width="26">
+                                <apex:facet name="header">
+                                    <apex:inputCheckbox title="Select All" onclick="checkUncheckAll(this)"/>
+                                </apex:facet>
+                                <apex:inputCheckbox value="{!n.assigned}" />
+                            </apex:column>
+                            <apex:column headerValue="User Name" value="{!n.user.Name}" />
+                        </apex:pageBlockTable>
+                    </apex:pageBlock>
+                </td>
+            </tr>
+            
+        </table>
+        <table width="65%" align="center">
+            <tr>
+                <td align="right">
+                    <apex:commandButton action="{!assignUsers}" value="Assign"/>
+                </td>
+                <td align="left">
+                    <apex:commandButton action="{!back}" value="Previous"/>
+                </td>
+            </tr>
+        </table>
+    </apex:form>
+    
+</apex:page>

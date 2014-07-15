@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <buckets>
+        <bucketType>number</bucketType>
+        <developerName>BucketField_33655821</developerName>
+        <masterLabel>Range of Distance Values</masterLabel>
+        <nullTreatment>z</nullTreatment>
+        <sourceColumnName>Activity.Check_In_Distance__c</sourceColumnName>
+        <useOther>false</useOther>
+        <values>
+            <sourceValues>
+                <to>300</to>
+            </sourceValues>
+            <value>Less than 300 Meters</value>
+        </values>
+        <values>
+            <sourceValues>
+                <from>300</from>
+                <to>1,600</to>
+            </sourceValues>
+            <value>Up to 1 Mile</value>
+        </values>
+        <values>
+            <sourceValues>
+                <from>1,600</from>
+            </sourceValues>
+            <value>Greater than 1 Mile</value>
+        </values>
+    </buckets>
+    <columns>
+        <field>ASSIGNED</field>
+    </columns>
+    <columns>
+        <field>SUBJECT</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Activity.Check_In__c</field>
+    </columns>
+    <columns>
+        <field>Activity.Check_In_Distance__c</field>
+    </columns>
+    <columns>
+        <field>Activity.Check_Out__c</field>
+    </columns>
+    <columns>
+        <field>Activity.Check_Out_Distance__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Activity.Check_In__c</column>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>BucketField_33655821</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Check-in Distance by Range of Values</name>
+    <params>
+        <name>closed</name>
+        <value>all</value>
+    </params>
+    <params>
+        <name>type</name>
+        <value>e</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountActivity</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>DUE_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2014-02-05</startDate>
+    </timeFrameFilter>
+</Report>

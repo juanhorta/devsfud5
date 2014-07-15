@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Display current user location and adjacent accounts on a map</description>
+    <label>Find Nearby Accounts</label>
+    <mobileReady>false</mobileReady>
+    <motif>Custom78: Map</motif>
+    <page>FindNearbyLocations</page>
+</CustomTab>

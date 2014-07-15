@@ -1,0 +1,483 @@
+<apex:page standardController="Event" extensions="Loc.LocationAnalytics" 
+    tabStyle="Location_Analytics__tab" sidebar="false" Id="thePage" >
+
+    <style>
+        a {
+            color: #015BA7;
+            text-decoration: none;
+        }
+        
+        body a:hover {
+           text-decoration: underline;
+           color: #015BA7;
+        }
+        
+        a.btn:hover {
+           text-decoration: none;
+        }
+    </style>
+    
+    <script type="text/javascript">
+        function checkAll(cb, cbid) {
+            var inputElement = document.getElementsByTagName("input");                     
+            for (var i = 0; i < inputElement.length; i++) {             
+                if (inputElement[i].id.indexOf(cbid) != -1) {                                        
+                    inputElement[i].checked = cb.checked;
+                }
+            }
+        }
+        
+        // After click the Add or Remove button, we need to uncheck all checkbox.
+        function uncheckAll() {
+            var inputElement = document.getElementsByTagName("input");
+            for (var i = 0; i < inputElement.length; i++) {                                                   
+                inputElement[i].checked = false;
+            }
+        }
+    </script>
+    
+    <apex:sectionHeader title="Location Analytics" />
+
+    <apex:form Id="form1">
+        <apex:pageMessages Id="message" />
+        
+        <apex:pageBlock title="Select for Map Display" Id="block1">
+            <apex:PageBlockButtons location="top">
+                <apex:CommandLink value="Analytics Map" action="{!analyticsMap}" target="_blank" styleClass="btn" />
+                <apex:commandButton action="{!remove}" value="Remove" reRender="message,form1,form3" 
+                    status="detailStatus" Id="remove" oncomplete="uncheckAll()"/>
+            </apex:PageBlockButtons>
+            
+            <apex:pageBlockTable value="{!selectedResult}" var="wrap" title="Selected Events" Id="table1">
+               
+                <apex:column style="width:2%">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox title="Select All" onclick="checkAll(this, 'removeSelected')"/>
+                    </apex:facet>
+                    
+                    <apex:inputCheckbox value="{!wrap.isSelected}" id="removeSelected"/>
+                </apex:column>
+                
+                <apex:column style="width:10%" headervalue="Subject/Title">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:commandLink value="{!wrap.Event.Subject}" onclick="window.open('/{!wrap.Event.Id}');return false;" />
+                    </apex:outputPanel>   
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:commandLink value="{!wrap.notes.Title}" onclick="window.open('/{!wrap.notes.Id}');return false;" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:commandLink value="{!wrap.visit['Name']}" onclick="window.open('/{!wrap.visit['Id']}');return false;" />
+                    </apex:outputPanel>
+                </apex:column>             
+
+                <apex:column headerValue="Source">
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >Note</apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputText >Event</apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >Visit Report</apex:outputText>
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column headerValue="Assigned User">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.owner.Name}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputField value="{!wrap.notes.owner.Name}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputField value="{!wrap.visit['owner']['Name']}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column style="width:15%" headerValue="Related To">                    
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                         <apex:outputField value="{!wrap.Event.WhatId}" />
+                    </apex:outputPanel>
+                
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputField value="{!wrap.notes.ParentId}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputField value="{!wrap.visit['gps_awi__DEALER_NAME__c']}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column colspan="4" headerValue="Locate at StartTime">
+                    <apex:outputPanel rendered="{!wrap.isNote == false}">
+                         <apex:outputField value="{!wrap.Event.Loc__Locate_at_StartTime__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column width="5%" headerValue="Check In">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column width="5%" headerValue="Check Out">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Check_Out__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column width="10%" headerValue="Time">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.StartDateTime}" rendered="{!wrap.Event.Loc__Locate_at_StartTime__c == true && wrap.Event.Loc__Check_In__c ==false}"/>
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In_Time__c}"  rendered="{!wrap.Event.Loc__Check_In__c ==true}"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >{!wrap.NoteLocateTime}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >{!wrap.VisitLocateTime}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                </apex:column>
+                
+               <apex:column width="20%" headerValue="Location">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__StartTime_Location__c}" rendered="{!wrap.Event.Loc__Locate_at_StartTime__c ==true && wrap.Event.Loc__Check_In__c ==false}"/>
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In_Location__c}" rendered="{!wrap.Event.Loc__Check_In__c ==true}"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >{!wrap.NoteLocateLocation}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >{!wrap.VisitLocateLocation}</apex:outputText>
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <apex:column headerValue="Visit Duration (Minutes)">
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Visit_Duration_Minutes__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+       
+    <BR />
+    
+    <apex:form Id="form2" >
+        <apex:pageBlock title="Filter" Id="filterBlock">
+            <apex:PageBlockButtons location="top">
+                <apex:commandButton action="{!search}" value="Search" reRender="message,form3" 
+                    status="detailStatus" Id="Search"  />
+            </apex:PageBlockButtons>
+            
+            <apex:PageBlockSection title="Filter" collapsible="false" columns="2" Id="filter">
+                          
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="Resource"/>
+                    <apex:selectList value="{!selectedSource}" size="1" Id="source">
+                        <apex:selectOptions value="{!sources}"  />
+                    </apex:selectList>
+                </apex:PageBlockSectionItem>
+                
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="Assigned User"/>
+                    <apex:selectList value="{!selectedUsers}" size="5" Id="assignedUser" multiselect="true" >
+                        <apex:selectOptions value="{!assignedUsers}" />
+                    </apex:selectList>
+                </apex:PageBlockSectionItem>
+                
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="Start Date"/>
+                    <apex:inputfield value="{!proxyObject.Loc__LA_Start_Date__c}"/>
+                </apex:PageBlockSectionItem>
+                
+                <apex:outputLabel value="" />
+                
+                <apex:PageBlockSectionItem >
+                    <apex:outputLabel value="End Date"/>
+                    <apex:inputfield value="{!proxyObject.Loc__LA_End_Date__c}"/>
+                </apex:PageBlockSectionItem>
+    
+                <apex:actionStatus id="detailStatus" layout="block"  > 
+                    <apex:facet name="start">
+                        <c:Waiting height="50px" width="120px" ImageUrl="/img/loading24.gif" Message="Waiting……"
+                            BorderSize="0" rendered="true" />
+                    </apex:facet>
+                </apex:actionStatus>
+               
+            </apex:PageBlockSection>
+        </apex:pageBlock>
+     </apex:form>
+     
+     <BR />
+     
+     <apex:form Id="form3">
+         <apex:pageMessage summary="No Searched Result" severity="INFO" strength="3" rendered="{!NOT(hasSearchedResult)}" />
+         
+         <apex:pageBlock title="Search Results" Id="block2" rendered="{!hasSearchedResult}">
+            <apex:PageBlockButtons location="top" >
+                <apex:commandButton action="{!add}" value="Add to 'Select for Map Display'" reRender="message,form1,form3" 
+                    status="detailStatus" Id="Add" oncomplete="uncheckAll()"/>
+            </apex:PageBlockButtons>
+            
+            <apex:pageBlockTable value="{!searchedResult}" var="wrap" title="Searched Results" Id="table2">
+            
+                <apex:pageMessage summary="No Searched Result" severity="INFO" strength="3" rendered="{!NOT(hasSearchedResult)}" />
+                
+                <apex:column style="width:2%">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox title="Select All" onclick="checkAll(this, 'addSelected')"/>
+                    </apex:facet>
+                    
+                    <apex:inputCheckbox value="{!wrap.isSelected}" id="addSelected"/>
+                </apex:column>
+                
+                <!-- Subject/Title -->
+                <apex:column style="width:10%">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Subject/Title"></apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:commandLink value="{!wrap.Event.Subject}" onclick="window.open('/{!wrap.Event.Id}');return false;" />
+                    </apex:outputPanel>   
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:commandLink value="{!wrap.notes.Title}" onclick="window.open('/{!wrap.notes.Id}');return false;" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:commandLink value="{!wrap.visit['Name']}" onclick="window.open('/{!wrap.visit['Id']}');return false;" />
+                    </apex:outputPanel>
+                </apex:column>             
+                
+                <!-- Resource -->
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Resource"></apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >Note</apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputText >Event</apex:outputText>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >Visit Report</apex:outputText>
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Assigned User -->
+                <apex:column style="width: 200px;word-wrap:break-word">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Assigned User"></apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.owner.Name}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputField value="{!wrap.notes.owner.Name}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputField value="{!wrap.visit['owner']['Name']}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Related To -->
+                <apex:column style="width:15%">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Related To"></apex:outputLabel>
+                    </apex:facet>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                         <apex:outputField value="{!wrap.Event.WhatId}" />
+                    </apex:outputPanel>
+                
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputField value="{!wrap.notes.ParentId}" />
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputField value="{!wrap.visit['gps_awi__DEALER_NAME__c']}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Locate at StartTime -->
+                <apex:column colspan="4">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Locate at StartTime"></apex:outputLabel>
+                    </apex:facet>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == false}">
+                         <apex:outputField value="{!wrap.Event.Loc__Locate_at_StartTime__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Check In -->
+                <apex:column width="5%">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Check In"></apex:outputLabel>
+                    </apex:facet>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Check Out -->
+                <apex:column width="5%">
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Check Out"></apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Check_Out__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Time -->
+                <apex:column width="10%">
+                    <apex:facet name="header">
+                        <apex:outputText >Time</apex:outputText>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.StartDateTime}" rendered="{!wrap.Event.Loc__Locate_at_StartTime__c == true && wrap.Event.Loc__Check_In__c ==false}"/>
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In_Time__c}"  rendered="{!wrap.Event.Loc__Check_In__c ==true}"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >{!wrap.NoteLocateTime}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >{!wrap.VisitLocateTime}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                </apex:column>
+               
+               <!-- Location -->
+               <apex:column width="20%">
+                    <apex:facet name="header">
+                        <apex:outputText >Location</apex:outputText>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__StartTime_Location__c}" rendered="{!wrap.Event.Loc__Locate_at_StartTime__c ==true && wrap.Event.Loc__Check_In__c ==false}"/>
+                        <apex:outputField value="{!wrap.Event.Loc__Check_In_Location__c}" rendered="{!wrap.Event.Loc__Check_In__c ==true}"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isNote == true}">
+                        <apex:outputText >{!wrap.NoteLocateLocation}</apex:outputText>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!wrap.isVisit == true}">
+                        <apex:outputText >{!wrap.VisitLocateLocation}</apex:outputText>
+                    </apex:outputPanel>
+                </apex:column>
+                
+                <!-- Visit Duration (Minutes) -->
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:outputLabel value="Visit Duration (Minutes)"></apex:outputLabel>
+                    </apex:facet>
+                    <apex:outputPanel rendered="{!wrap.isNote == false && wrap.isVisit == false}">
+                        <apex:outputField value="{!wrap.Event.Loc__Visit_Duration_Minutes__c}" />
+                    </apex:outputPanel>
+                </apex:column>
+            </apex:pageBlockTable>
+
+            <apex:actionFunction name="first" action="{!first}" status="detailStatus" reRender="form3, message"/>
+            <apex:actionFunction name="last" action="{!last}" status="detailStatus" reRender="form3, message"/>
+            <apex:actionFunction name="next" action="{!next}" status="detailStatus" reRender="form3, message"/>
+            <apex:actionFunction name="previous" action="{!previous}" status="detailStatus" reRender="form3, message"/>
+            <apex:actionFunction name="changePageSize" action="{!changePageSize}" status="detailStatus" reRender="form3, message"/>
+            <apex:actionFunction name="callAction" action="{!pageNavigation}" status="detailStatus" reRender="form3, message"/>
+            <BR />
+            <span>
+                <apex:outputLabel value="Page Size: " />
+                <apex:selectList value="{!pageSize}" size="1" onchange="changePageSize();return false;">
+                    <apex:selectOptions value="{!items}"/>
+                </apex:selectList>
+            </span>
+            
+            <span style="margin: 10px;">
+                <span style="margin: 0 3px;">
+                    <apex:outputPanel rendered="{!hasPrevious}">
+                        <img src="/s.gif" onclick="first();return false;" style="cursor:pointer; cursor:hand; background-image: url('/img/paginationArrows.gif');background-position: 0 1px;background-repeat: no-repeat; height: 10px;width: 9px;"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!(!hasPrevious)}">
+                        <img src="/s.gif" style="cursor:text; background-image: url('/img/paginationArrows.gif');background-position: 0 -10px;background-repeat: no-repeat; height: 10px;width: 9px;"/>
+                    </apex:outputPanel>
+                </span>
+                
+                <span style="margin: 0 3px;">
+                    <apex:outputPanel rendered="{!hasPrevious}">
+                        <img class="prev" src="/s.gif" onclick="previous();return false;" style="cursor:pointer; cursor:hand;background-image: url('/img/paginationArrows.gif'); background-position: -10px 1px;background-repeat: no-repeat;height: 10px;margin: 0; padding: 0;width: 9px;"/>
+                        <apex:outputLabel value="Previous"  style="cursor:pointer; cursor:hand;" onclick="previous();return false;"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!(!hasPrevious)}">
+                        <img src="/s.gif" style="cursor:text; background-image: url('/img/paginationArrows.gif');background-position: -10px -10px;background-repeat: no-repeat;height: 10px;margin: 0;padding: 0;width: 9px;"/>
+                        <apex:outputLabel value="Previous"  style="cursor:text; color: #A8A8A8"/>
+                    </apex:outputPanel>
+                </span>
+                
+                <span style="margin: 0 3px;">
+                    <apex:outputPanel rendered="{!hasNext}">
+                        <apex:outputLabel value="Next" style="cursor:pointer; cursor:hand;" onclick="next();return false;"/>
+                        <img src="/s.gif" onclick="next();return false;" style="cursor:pointer; cursor:hand; background-image: url('/img/paginationArrows.gif');background-position: -17px 1px; background-repeat: no-repeat;height: 10px; width: 9px;"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!(!hasNext)}">
+                        <apex:outputLabel value="Next" style="cursor:text; color: #A8A8A8"/>
+                        <img src="/s.gif" style="cursor:text; background-image: url('/img/paginationArrows.gif');background-position: -17px -10px;background-repeat: no-repeat;height: 10px;width: 9px;"/>
+                    </apex:outputPanel>
+                </span>
+                
+                <span style="margin: 0 3px;">
+                    <apex:outputPanel rendered="{!hasNext}">
+                        <img src="/s.gif" onclick="last();return false;" style="cursor:pointer; cursor:hand; background-image: url('/img/paginationArrows.gif'); background-position: -27px 1px;background-repeat: no-repeat;height: 10px;width: 9px;"/>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel rendered="{!(!hasNext)}">
+                        <img src="/s.gif" style="cursor:text; background-image: url('/img/paginationArrows.gif');background-position: -27px -10px;background-repeat: no-repeat;height: 10px;width: 9px; "/>
+                    </apex:outputPanel>
+                </span>
+            </span>
+            
+            <span style="margin: 10px;">
+                <apex:outputLabel value="Page Number: "/>
+                <apex:inputText id="pageNo" value="{!curPageNo}" style="width:20px; text-align:center" size="3" onkeydown="return runScript(event);"/>
+                <apex:outputLabel value=" of {!pageCount}"/>
+            </span>
+        </apex:pageBlock>
+        <script>
+            function runScript(obj) {
+                if (obj.keyCode == 13) {
+                    callAction();   // call action function
+                    return false;
+                }
+                else if ((obj.keyCode > 34 && obj.keyCode < 40) || 
+                         (obj.keyCode > 95 && obj.keyCode < 106) || 
+                         (obj.keyCode > 47 && obj.keyCode < 58) || 
+                          obj.keyCode == 8 || obj.keyCode == 46 ){
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        </script>
+            
+    </apex:form>
+</apex:page>

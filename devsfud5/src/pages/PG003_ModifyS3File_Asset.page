@@ -1,0 +1,6 @@
+<apex:page standardController="Archivo_por_activo__c" >
+	<apex:pageMessages />
+	<script type="text/javascript">
+		document.location = '/apex/PG001_NewS3File_Step1?FileId={!Archivo_por_activo__c.Archivo_amazon_s3__c}&retURL={!$CurrentPage.parameters.retURL}';
+	</script>
+</apex:page>

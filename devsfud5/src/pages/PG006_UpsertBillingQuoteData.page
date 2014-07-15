@@ -1,0 +1,6 @@
+<apex:page standardController="Cuota_facturacion__c">
+	<apex:pageMessages />
+	<script type="text/javascript">
+		document.location = '/apex/PG006_UpsertBillingData?id={!Cuota_facturacion__c.Dato_facturacion__c}';
+	</script>
+</apex:page>

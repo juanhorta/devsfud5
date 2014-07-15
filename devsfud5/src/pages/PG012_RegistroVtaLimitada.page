@@ -1,0 +1,84 @@
+<apex:page id="pagevtalimitada" standardController="Registro_de_Venta_Limitada__c" extensions="CTR012_RegistrovtaLimitada"  action="{!LoadTipodeInventario}" showheader="true" sidebar="false">
+    
+    <head>
+        <title>Registro de Venta Limitada</title> 
+    </head>
+    <apex:sectionHeader title="Registro de Venta Limitada" />
+   
+    <apex:form id="formAnnulation" >
+      
+         <apex:actionStatus id="loadingStatus">
+                <apex:facet name="start">
+                   <c:Loading Titulo="Procesando"
+                   Subtitulo="Validando disponibilidad del Inventario de productos..." numeroImagen="3" />
+                </apex:facet>
+         </apex:actionStatus>
+     <apex:pageBlock id="Block1" tabStyle="Registro_de_Venta_Limitada__c" Title=""  rendered="true"  > 
+        
+           <apex:pageBlockButtons >
+             <apex:commandButton action="{!ValidarDisponibilidad}" value="Validar Disponibilidad y Guardar" id="btnGo" status="loadingStatus"  reRender="pagevtalimitada:formAnnulation"  />
+             <apex:commandButton action="{!doCancel}" value="Regresar"  />
+           </apex:pageBlockButtons>
+          
+           <apex:pageMessages id="idPM2" ></apex:pageMessages>
+          <apex:pageBlockSection title="Caracteristicas del Control de Inventario Actual " columns="2" rendered="{!validatedata}"  > 
+         
+                
+           
+             
+           
+                 <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Control de Inventario al que esta suscrito"/>
+                    <apex:outputLink value="/{!Registro_de_Venta_Limitada__c.Control_de_Inventario__c}">{!Registro_de_Venta_Limitada__c.Control_de_Inventario__r.Name}</apex:outputLink>
+                </apex:pageBlockSectionItem>  
+                                        
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Sección Principal" />
+                    <apex:outputField value="{!Registro_de_Venta_Limitada__c.Seccion_principal__c}" />
+                </apex:pageBlockSectionItem> 
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Tipo de Inventario Relacionado" />
+                    <apex:outputField value="{!Registro_de_Venta_Limitada__c.Tipo_de_Inventario__c}" />
+                </apex:pageBlockSectionItem> 
+              
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Ciudad Adicional" />
+                    <apex:inputField value="{!Registro_de_Venta_Limitada__c.Ciudad__c}" />
+                </apex:pageBlockSectionItem> 
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Precio" />
+                    <apex:outputField value="{!Registro_de_Venta_Limitada__c.Precio__c}" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >  
+                    <apex:outputLabel value="Ciudad es Principal?"/>
+                    <apex:inputCheckbox value="{!Registro_de_Venta_Limitada__c.Ciudad_es_principal__c}"> 
+                    <apex:actionSupport event="onchange"  reRender="pagevtalimitada:formAnnulation" status="loadingStatus" action="{!PreciociudadPrincipal}" /> 
+                    </apex:inputCheckbox> 
+                 </apex:pageBlockSectionItem> 
+                
+        
+        </apex:pageBlockSection>  
+        <apex:pageBlockSection title="Estado del registro de venta limitada " columns="1" rendered="{!validatedata}"  > 
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Estado" />
+                    <apex:outputField value="{!Registro_de_Venta_Limitada__c.Estado__c}" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >                        
+                    <apex:outputLabel value="Activado" />
+                    <apex:outputField value="{!Registro_de_Venta_Limitada__c.Activado__c}" />
+                </apex:pageBlockSectionItem>
+       
+                
+        </apex:pageBlockSection>   
+     </apex:pageBlock>    
+         
+         
+    </apex:form>
+    
+
+  
+</apex:page>

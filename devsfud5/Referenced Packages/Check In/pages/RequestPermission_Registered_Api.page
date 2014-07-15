@@ -1,0 +1,92 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" standardController="Loc__MobilePhone__c"   extensions="Loc.RegisteredMobilePhoneExtension_Api">
+    <apex:stylesheet value="{!URLFOR($Resource.Loc__styles, 'styles.css')}" />
+    <apex:outputText style="font-size:16px; font-weight:bold"  value="{!$Label.loc__MP_Permission_Col_Status_Optin}"/>
+    <apex:image id="MobileUser" value="{!$Resource.Loc__MobileUser}" style="align: right;" width="47" height="46"/>
+    <apex:image id="SMSYes" value="{!$Resource.Loc__SMSYES}" style="align: right;" width="46" height="46"/>
+    <apex:form >
+    <apex:dataTable value="{!RegisteredMobilePhoneRecords}" var="pitem" rowClasses="odd,even">
+            <apex:column headerValue="{!$Label.loc__MP_Permission_Col_MobilePhoneName}">
+                <apex:outputText value="{!pitem.name}"/>
+            </apex:column>
+            <apex:column headerValue="{!$Label.loc__MP_Permission_Col_MobilePhoneNumber}">
+                <apex:outputText value="{!pitem.Loc__MobilePhoneNumber__c}"/>
+            </apex:column>
+            <apex:column headerValue="{!$Label.loc__MP_Permission_Col_LastUpdate}">
+                <apex:outputField value="{!pitem.Loc__Status_Change_Date__c}" />
+            </apex:column>
+            <apex:column headerValue="{!$Label.loc__MP_Permission_Col_CancelPermission}">
+                <apex:commandLink value="{!$Label.loc__Link_CancelPermission}" action="{!showPopup}" rerender="popupRegisterCancel">
+                   <apex:param value="{!pitem.id}" name="mobilePhoneId" assignto="{!mobilePhoneId}"/>
+                </apex:commandLink>
+            </apex:column>
+     </apex:dataTable>
+     
+     <apex:outputText style="margin-left; font-size:12px; font-style:italic ; font-weight:normal" value="{!$Label.loc__MP_Note_Registered}" />
+          <apex:outputPanel id="popupRegisterCancel">
+           <apex:outputPanel id="popupLocateNowError">
+        
+        <apex:outputPanel styleClass="customPopupCancel" layout="block" rendered="{!displayErrorPopUp}">
+            Error
+            <br/>
+            {!ErrorMessage} <br/><br/><br/>
+           
+             <apex:actionStatus id="statusActionManualyi1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                               <apex:commandLink value="OK" action="{!closePopup}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                               <apex:commandLink value="OK" action="{!closePopup}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                             
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+        </apex:outputPanel>
+    </apex:outputPanel>
+     
+     <apex:outputPanel styleClass="customPopupCancel" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.loc__Link_CancelPermission}"<br/>
+                "{!$Label.loc__Message_Optout}" <br/><br/><br/>
+               
+                 <apex:actionStatus id="statusActionManual1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.Loc__loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterCancel" status="statusActionManual1"/>
+                                      <apex:outputText value="   " />
+                                <apex:commandButton value="{!$Label.loc__Link_CancelPermission}" action="{!cancelRegistered}" rerender="popupRegisterCancel," status="statusActionManual1"/>
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+                
+     </apex:outputPanel>
+     </apex:outputPanel>
+     <style type="text/css">
+       .customPopupCancel{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            margin-top:-200px;
+        }
+    </style>
+    </apex:form>
+</apex:page>

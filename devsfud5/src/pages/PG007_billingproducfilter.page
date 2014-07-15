@@ -1,0 +1,47 @@
+<apex:page standardController="QuoteLineItem" extensions="CTR007_billingproducfilter">
+
+	<apex:includeScript value="{!URLFOR($Resource.jQuery, 'jquery-ui-1.10.4.custom/js/jquery-1.10.2.js')}"  />
+
+	<apex:pageMessages />
+	
+	<apex:form id="formBillingData">
+  		
+  		<apex:pageBlock title="" mode="edit">
+ 		
+		<apex:pageBlockButtons >
+			<apex:commandButton action="{!SelectAsset}" value="Guardar" />
+			<a href="/{!QuoteLineItem.Id}">Cancelar</a>
+		</apex:pageBlockButtons> 
+			<apex:pageBlockSection title="Activos de renovación" columns="1">
+ 			  	<apex:pageBlockTable value="{!AssetInfo}" var="assinf">
+					<apex:column >
+	            		<apex:facet name="header"></apex:facet>
+	            		<input id="rbSelectedAsset_{!assinf.id}" type="radio" name="rbSelectedAsset" value="{!assinf.id}"/>
+			        </apex:column>
+        			<apex:column value="{!assinf.AccountId}"/>
+         			<apex:column >
+	            		<apex:facet name="header">Activo</apex:facet>
+		            	<a href="/{!assinf.Id}">{!assinf.Name}</a>
+         			</apex:column>
+         			<apex:column value="{!assinf.Product2Id}"/>
+         			<apex:column value="{!assinf.Price}"/>
+         			<apex:column value="{!assinf.Product2.Family}"/>
+         			<apex:column value="{!assinf.Product2.Linea_de_produccion__c}"/>
+					<apex:column value="{!assinf.InstallDate}"/>
+         			<apex:column value="{!assinf.SerialNumber}"/>      			
+     			</apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+ 	</apex:form>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+  			//script to select current asset
+			var ovAr = $('#rbSelectedAsset_{!if(CurrentQuoteItem.Activo_renovacion__c!=null,CurrentQuoteItem.Activo_renovacion__c,CurrentQuoteItem.Activo_Upselling__c)}');
+			
+			if(ovAr){
+				ovAr.attr('checked','checked');
+			}
+		});
+
+	</script> 	
+</apex:page>

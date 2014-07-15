@@ -1,0 +1,32 @@
+<apex:page standardController="Archivo_por_caso__c" extensions="CTR001_NewS3File_Case_Step0">
+  <apex:pageMessages />
+  <apex:form id="formFileCaseSave">
+	<apex:pageBlock title="Nuevo archivo por caso" mode="edit">		
+		<apex:pageBlockButtons >
+			<apex:commandButton action="{!NextStep0}" value="Siguiente" >
+			</apex:commandButton>
+		</apex:pageBlockButtons>
+		<apex:pageBlockSection title="Paso 1: Indique las propiedades del archivo" columns="1">
+			<br />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Nombre del archivo"/>
+				<apex:inputField value="{!Archivo_por_caso__c.Name}"
+						id="Field_Name" required="true"/>
+			</apex:pageBlockSectionItem>
+			<br />
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Extensión del archivo"/>
+				<apex:inputField value="{!Archivo_por_caso__c.Extension__c}"
+						id="Field_Extension__c" required="true"/>						
+			</apex:pageBlockSectionItem>
+			<br />	
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="Tipo contenido"/>
+				<apex:inputField value="{!Archivo_por_caso__c.Tipo_contenido__c}"
+						id="Field_Tipo_contenido__c" required="true"/>
+			</apex:pageBlockSectionItem>
+			<br />
+		</apex:pageBlockSection>
+  	</apex:pageBlock>
+  </apex:form>
+</apex:page>

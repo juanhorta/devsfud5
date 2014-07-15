@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <validationRules>
+        <fullName>Assigned_User_Check</fullName>
+        <active>true</active>
+        <description>Verify logged in User is Checking-In / Checking-out</description>
+        <errorConditionFormula>OR ( AND(ISNEW(), OR(Check_In__c = TRUE,Check_Out__c = TRUE)), ISCHANGED(Check_In__c), ISCHANGED(Check_Out__c)) &amp;&amp; $User.Id &lt;&gt; OwnerId</errorConditionFormula>
+        <errorMessage>Only the assigned user can check-In / Out</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Checkboxes_may_not_be_unselected</fullName>
+        <active>true</active>
+        <description>Check-In App Checkboxes : Once a checkbox is selected and saved, the checkbox cannot be unselected.</description>
+        <errorConditionFormula>AND(ISCHANGED(Check_In__c), Check_In__c == false) ||
+AND(ISCHANGED(Check_Out__c), Check_Out__c == false) ||
+AND(ISCHANGED(Locate_at_StartTime__c), Locate_at_StartTime__c == false)</errorConditionFormula>
+        <errorMessage>&quot;LocateAtStartTime, Check-In or Check-Out&quot; once selected and saved, cannot be unselected.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>You_Must_Check_In_First</fullName>
+        <active>true</active>
+        <description>A User can only Check-Out if the User had Checked-in.</description>
+        <errorConditionFormula>OR(AND(ISNEW(), Check_Out__c == true), 
+AND(NOT(ISNEW()), AND(Check_In__c == false,OR( Locate_at_StartTime__c == false,  StartTime_Location__c == null)),  Check_Out__c == true))</errorConditionFormula>
+        <errorMessage>You must Check-in before you can Check-out</errorMessage>
+    </validationRules>
+</CustomObject>

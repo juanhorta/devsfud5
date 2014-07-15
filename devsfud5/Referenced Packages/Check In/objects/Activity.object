@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Check_In_Distance__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check In Distance</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_In_Locate_Mobile_Phone_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-In Locate Mobile Phone Id</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_In_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-In Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_In_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-In Time</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Check_In__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check In</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Check_Out_Distance__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check Out Distance</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_Out_Locate_Mobile_Phone_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-Out Locate Mobile Phone Id</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_Out_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-Out Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Check_Out_Time__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-Out Time</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Check_Out__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Check-Out</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Locate_Mobile_Phone_Id__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>Locate Mobile Phone Id</label>
+        <length>18</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Locate_at_StartTime__c</fullName>
+        <defaultValue>false</defaultValue>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <inlineHelpText>Select to Auto locate assigned user at event start time. User&apos;s Mobile phone must be opted-in.</inlineHelpText>
+        <label>Locate at StartTime</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>StartTime_Distance__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>StartTime Distance</label>
+        <precision>10</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>StartTime_Location__c</fullName>
+        <deprecated>false</deprecated>
+        <externalId>false</externalId>
+        <label>StartTime Location</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Visit_Duration_Minutes__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Visit Duration in Minutes. 
+If Check-in Time is later than Check-out Time, visit duration is 0. This situation may arise if carrier network location is used.</description>
+        <externalId>false</externalId>
+        <formula>IF(((Check_Out_Time__c - Check_In_Time__c )*24*60+1)&gt;0,(Check_Out_Time__c - Check_In_Time__c )*24*60+1, 0)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Visit Duration (Minutes)</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>mLatitude__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The latitude retrieved from a mobile browser. This field is only populated if location lookup is allowed by the browser.</description>
+        <externalId>false</externalId>
+        <label>mLatitude</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>14</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>mLocation_Status__c</fullName>
+        <deprecated>false</deprecated>
+        <description>Status returned from mobile browser geolocation lookup.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>DEVICE_NOT_SUPPORTED - Geolocation lookup not supported on this device.
+PERMISSION_DENIED - User said no.
+POSITION_UNAVAILABLE - Network is down or satallites unavailable.
+TIMEOUT - Network is up but it took too long to calculate the devices position.</inlineHelpText>
+        <label>mLocation_Status</label>
+        <length>40</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>mLongitude__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The longitude retrieved from a mobile browser.  This field is only populated if location lookup is allowed by the browser.</description>
+        <externalId>false</externalId>
+        <label>mLongitude</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>14</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>mRadius__c</fullName>
+        <deprecated>false</deprecated>
+        <description>The accuracy or radius in meters from the mobile web browsers geolocation lookup. This field is only populated if location lookup is allowed by the browser.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Radius in meters</inlineHelpText>
+        <label>mRadius</label>
+        <precision>12</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+</CustomObject>

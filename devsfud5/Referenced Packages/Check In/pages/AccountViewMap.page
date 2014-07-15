@@ -1,0 +1,5 @@
+<apex:page recordSetvar="notuse" sidebar="false" Standardcontroller="Account" extensions="Loc.AccountViewMapController">
+   
+   <c:NewPointMapLeaflet allpoints="{!allphonelocate}" />
+     
+</apex:page>

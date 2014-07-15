@@ -1,0 +1,128 @@
+<apex:page sidebar="false" showheader="false" controller="Loc.FindNearbyLocations">
+   
+        <apex:stylesheet value="{!URLFOR($Resource.Loc__Leaflet, '/leaflet.css')}"/>
+        <apex:includeScript value="{!URLFOR($Resource.Loc__Leaflet, '/leaflet.js')}"/>  
+		<script src="{!mapquestApiUrl}?key={!mapquestApiKey}"></script> 
+		                   
+    <!-- Setup the map to take up the whole window --> 
+    <style>
+        html, body { height: 100%; }
+        .page-map, .ui-content, #map-canvas { width: 100%; height:100%; padding: 0; }
+        #map-canvas { height: min-height: 100%; }
+    </style>
+    
+    <script>
+         var map = null;
+         var zoomval = 11;
+         var theLayerGroup = null;
+         var centerLat,centerLon,centerLatlng;
+                
+        function initialize() {
+            var lat, lon;
+              
+             // If we can, get the position of the user via device geolocation
+             if (navigator.geolocation) {
+                 navigator.geolocation.getCurrentPosition(function(position){
+                     centerLat = position.coords.latitude;
+                     centerLon = position.coords.longitude;
+                     centerLatlng = L.latLng(centerLat,centerLon);                    
+                     createMap(centerLat, centerLon);
+                     // Use Visualforce JavaScript Remoting to query for nearby locationss      
+                  });
+              } else {
+                  // Set default values for map if the device doesn't have geolocation capabilities
+                    /** San Francisco **/
+                    lat = 37.77493;
+                    lon = -122.419416;
+                    
+                    var result = [];
+                    createMap(lat, lon, result);
+              }
+          
+         }        
+            
+         function createMap(lat, lon){     
+            var currentPosition = [lat,lon]; 
+	        map = L.map('map-canvas', {
+	            layers: MQ.mapLayer()
+	            ,center: currentPosition
+	            ,zoom: zoomval
+	        });  
+	        L.control.layers({
+			    'Map': MQ.mapLayer(),
+			    'Satellite': MQ.satelliteLayer(),
+			    'Hybrid': MQ.hybridLayer()
+			}).addTo(map);
+			L.control.scale({position:'bottomleft'}).addTo(map);			           
+            map.on('viewreset', updateMap);
+            map.on('dragend', updateMap);
+            var iconUrl = '{!$Resource.MapGreenMarker}';  
+            var myIcon = L.icon({iconUrl: iconUrl});
+            var marker = L.marker([lat,lon], {icon: myIcon}).addTo(map);                  
+            updateMap ();            
+        }
+
+        function updateMap () {
+            var locs,loc;
+            var markers = [];
+            if (theLayerGroup) {theLayerGroup.clearLayers()};
+            var bounds = map.getBounds();
+            var north = bounds.getNorth() + '';
+            var south = bounds.getSouth() + '';
+            var east = bounds.getEast() + '';
+            var west = bounds.getWest() + '';                                   
+            Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.FindNearbyLocations.getNearbyLocations}', north,south,east,west,
+               function(result, event){
+                   if (event.status) {
+                       console.log(result);
+                       locs = result;
+                        for(var i=0; i<locs.length;i++){
+                            loc = locs[i];
+                            console.log(locs[i]);
+                            markers.push(setupMarker(loc));
+                        } 
+                        theLayerGroup = L.layerGroup(markers).addTo(map);                                 
+                   } else if (event.type === 'exception') {
+                       //exception case code          
+                   } else {
+                                  
+                   }
+                }, 
+                {escape: true}
+            );      
+        }
+        
+        function setupMarker(loc){ 
+             iconUrl = "{!$Resource.IconDefaultMapMarker}";  
+             theIcon = L.icon({iconUrl: iconUrl});           
+             position = L.latLng(loc.lat,loc.lng);
+             var dist = centerLatlng.distanceTo(position); 
+             dist = Math.round((.00062 * dist) * 100)/100;                              
+             return L.marker(position, {icon: theIcon}).bindPopup(getInfoContent(loc,dist + ""));                   
+        }  
+
+         function getInfoContent (loc,dist) {
+            var navUrl = "";
+             try{
+                    if(sforce.one){
+                        navUrl = 
+                            "javascript:sforce.one.navigateToSObject('" + loc.recordId + "')";
+                    }
+                } catch(err) {
+                    console.log(err);
+                    navUrl = '/' + loc.recordId;
+                }
+
+             var infoContent = "<div><a href=" + navUrl + ">" + loc.name + "</a>&nbsp;&nbsp;&nbsp;&nbsp;" + dist + "<i>m</i><br/>";;
+             infoContent += loc.street + ", " + loc.city + "</div>";
+             return infoContent;
+         }
+                       
+        initialize();
+        
+    </script>
+
+    <body style="font-family: Arial; border: 0 none;">
+        <div id="map-canvas"></div>
+    </body>
+</apex:page>

@@ -1,0 +1,224 @@
+<apex:page Controller="CTR008_SendCreditCheck"  id="page1" showheader="true" sidebar="false"   >  
+  <script>
+    function cerrar() {
+        top.window.close();
+    }
+     function inicio(){
+   
+           Inicioprocess()
+    }
+    window.onload = inicio;
+   
+  </script> 
+  
+  <style type="text/css">
+        .bold { font-weight: bold; }
+        .required {
+            border-left: 3px solid #FFF; 
+        }
+        .boldreq{
+                font-weight: bold;
+            border-left: 3px solid #FFF; 
+        }
+  </style>
+  
+  <style type="text/css">
+  .detailList {
+      table-layout: fixed;
+  }
+  .labelCol {
+      text-align: left !important;
+      width: 10% !important;
+      max-width: 10% !important;
+  }
+</style>
+
+<style>
+    .activeTab {background-color: #236FBD; color:white;
+
+         background-image:none}
+
+   .inactiveTab {background-color: lightgrey; color:black;
+
+                 background-image:none}
+
+</style>
+
+
+        
+    <head>
+        <title>{!strTittlePage}</title> 
+    </head>
+  
+    <apex:sectionHeader title="{!strTittlePage}" />
+   
+    <apex:form id="formDispCredit">
+            <!-- *******************************LLAMADO AL SW MD******************************* -->
+              <apex:actionFunction id="Inicioprocess"  name="Inicioprocess" action="{!validarCU}" status="loadingStatus" oncomplete="{{!IF(CU,'Validavtaenlinea()','Validavtaenlinea()')}}" reRender="page1:formDispCredit"/>
+              <apex:actionFunction id="Validavtaenlinea"  name="Validavtaenlinea" action="{!SumacontroldeInventario}" status="loadingStatus" oncomplete="{{!IF(Vtalimitadaok,'ServiceChequeo()','')}}" reRender="page1:formDispCredit"/>
+              <apex:actionFunction id="ServiceChequeo"  name="ServiceChequeo" action="{!lanzarProceso}" status="loadingStatus" oncomplete="{{!IF(isok,'','')}}" reRender="page1:formDispCredit"/>
+
+              
+              
+              <apex:actionStatus id="loadingStatus">
+                <apex:facet name="start">
+                   <c:Loading Titulo="Procesando"
+                   Subtitulo="Este proceso tardara unos segundos..." numeroImagen="3" />
+                </apex:facet>
+         </apex:actionStatus>
+        
+          <apex:pageBlock id="Block2" tabStyle="Product2" Title="{!nameCotizacion}" >
+             
+             <apex:panelGrid columns="1" id="theGrid2" >
+                     <apex:pageBlockSection title="Mensajes del chequeo" columns="1" rendered="{!BlnMessage}" >
+                      <apex:pageMessages id="idPM2" ></apex:pageMessages>
+                     <apex:outputLabel value="{!StrMessage}" title="StrMessage"></apex:outputLabel>
+                     </apex:pageBlockSection>   
+                    <apex:pageBlockSection title="Detalle de la cotización" columns="1" rendered="{!isok}" >
+                    <apex:pageBlockSection columns="2"  >
+                           
+                           <b>Tipo de consulta realizada:</b>
+                           <apex:outputLabel value="{!strbillingdata}" title="infoproducts"></apex:outputLabel>
+                     
+                     </apex:pageBlockSection> 
+                         <apex:pageBlockTable columns="6" value="{!detallecotizacion}" var="request" frame="box"  >
+                              <apex:column value="{!request.Lineaproduccion}" headerValue="Linea de Producción"  />
+                              <apex:column value="{!request.producto}" headerValue="Producto"  />
+                              <apex:column value="{!request.plazo}" headerValue="Plazo" />
+                              <apex:column headerValue="Monto">
+                                            <apex:outputText value="{0,number,#,##0.00;(#,##0.00)}" >
+                                                    <apex:param value="{!request.monto}"/>
+                                            </apex:outputText>
+                                         </apex:column>
+                             <apex:column value="{!request.fMaxPrimeraCuota}" headerValue="Fecha Primera Cuota" />
+                             <apex:column value="{!request.fMaxUltimaCuota}" headerValue="Fecha Ultima Cuota" />                             
+                             
+                         </apex:pageBlockTable> 
+                   
+                 </apex:pageBlockSection>   
+                    <apex:pageBlockSection title="Detalle Respuestas Chequeo" columns="1" rendered="{!billingdata}" >
+                        
+                        <apex:pageBlockTable columns="5" value="{!listCreditWorthiness}" var="lista" frame="box"  >
+                            <apex:column value="{!lista.nombrePropuestaComercial}" headerValue="Nombre de la cotización" />
+                            <apex:column value="{!lista.indicadorFv}" headerValue="Resultado del Chequeo" />
+                             <apex:column value="{!lista.permiteExcepcionFv}" headerValue="Requiere Excepción" />
+                            <apex:column value="{!lista.requiereEstudioFv}" headerValue="Requiere Estudio" />   
+                            <apex:column headerValue="Mensajes Asociados al Chequeo" >                                
+                                <apex:pageBlockTable columns="1" value="{!lista.listCheckingDescription}" var="listaMensajes"> 
+                                        <apex:column value="{!listaMensajes.mensaje}" />   
+                                </apex:pageBlockTable>    
+                            </apex:column>                             
+                        </apex:pageBlockTable> 
+                            
+                  </apex:pageBlockSection>
+             </apex:panelGrid>
+             
+              <apex:pageBlockButtons >
+                 <apex:commandButton action="{!Regresar}" value="Regresar"  rendered="{!not requestFromsimulation}" />
+                 <apex:commandButton value="Cerrar"  rendered="{!requestFromsimulation}"  onclick="cerrar();"/>
+              </apex:pageBlockButtons>     
+         </apex:pageBlock>
+         
+         
+         
+         <apex:pageBlock id="Block3" tabStyle="Product2" Title="Información Asociada al Cliente"  rendered="{!isok}">
+                
+             
+             
+              <apex:panelGrid columns="10" id="theGrid3" > 
+                 <apex:panelGrid columns="10" id="theGrid12" >
+                        <apex:pageBlockSection title="Detalle chequeo de crédito" columns="1" collapsible="true"  >
+                           <apex:pageBlockTable columns="10" value="{!resultDetalle}" var="lista"  >
+                                <apex:column value="{!Namecuenta}" headerValue="Nombre de la Cuenta" colspan="2" />
+                                 <apex:column value="{!identification}" headerValue="Número Identificación" />
+                                 <apex:column value="{!Clienteunico}" headerValue="Cliente Unico" />
+                                <apex:column value="{!Codigocuenta}" headerValue="Código de la Cuenta" /> 
+                                <apex:column value="{!lista.debtorbartyBlockedIndicatorFv}" headerValue="Cliente Bloqueado" />
+                                <apex:column value="{!lista.debtorPartySpecialAttentionRequiredIndicatorFv}" headerValue="Cliente de Atención Especial" />                                
+                                <apex:column headerValue="Proyección Validéz del Chequeo" >
+                                    
+                                    <apex:outputText value="{0, date, dd/MM/yyyy}"  >
+                                       <apex:param value="{!lista.dynamicCheckHorizonEndDate}" />
+                                    </apex:outputText>
+                                </apex:column>
+                           </apex:pageBlockTable>  
+                           <p/>
+                           <apex:pageBlockTable columns="5" value="{!resultDetalle}" var="lista">
+                                <apex:column headerValue="Cliente Unico Masterdata" >
+                                    <apex:pageBlockTable columns="1" value="{!lista.debtorPartyRS}" var="listaDebtorPartyRS">
+                                            <apex:column value="{!listaDebtorPartyRS.internalId}" headerValue="Código" />                                    
+                                    </apex:pageBlockTable> 
+                                </apex:column>
+                                                                
+                                <apex:column headerValue="Clasificación" >
+                                <apex:pageBlockTable columns="2" value="{!lista.rating}" var="listarating">
+                                        <apex:column value="{!listarating.Code}" headerValue="Solvencia" />
+                                        
+                                        <apex:column headerValue="Fecha Validez Solvencia" >
+                                            <apex:outputText value="{0, date, dd/MM/yyyy}"  >
+                                               <apex:param value="{!listarating.validityPeriod.endDate}" />
+                                            </apex:outputText>
+                                        </apex:column>
+                                        
+                                    
+                                </apex:pageBlockTable> 
+                                </apex:column>
+                                
+                                
+                                <apex:column headerValue="Riesgo" >
+                                    <apex:pageBlockTable columns="2" value="{!lista.RiskClass}" var="listarating">
+                                            <apex:column value="{!listarating.code}" headerValue="Tipo de Riesgo" />
+                                           
+                                    </apex:pageBlockTable> 
+                              </apex:column>
+                              
+                              <apex:column headerValue="Límite de Crédito" >
+                                  <apex:pageBlockTable columns="2" value="{!lista.CreditLimit}" var="listaCreditLimit">
+
+                                         <apex:column headerValue="Límite de cupo Asignado">
+                                            <apex:outputText value="{0,number,#,##0.00;(#,##0.00)}" >
+                                                    <apex:param value="{!listaCreditLimit.amount}"/>
+                                            </apex:outputText>
+                                         </apex:column>
+                                
+
+                                        <apex:column headerValue="Fecha de Validez del límite" >
+                                            <apex:outputText value="{0, date, dd/MM/yyyy}"  >
+                                               <apex:param value="{!listaCreditLimit.validityPeriod.endDate}" />
+                                            </apex:outputText>
+                                        </apex:column>
+                                    
+                                  </apex:pageBlockTable> 
+                              </apex:column>
+                              
+                             <apex:column headerValue="Cupo Disponible" >
+                                 <apex:pageBlockTable columns="2" value="{!resultDetalle}" var="listaCupUtil">
+                                         <apex:column headerValue="Saldo Disponible">
+                                            <apex:outputText value="{0,number,#,##0.00;(#,##0.00)}" >
+                                                    <apex:param value="{!listaCupUtil.saldo}"/>
+                                            </apex:outputText>
+                                         </apex:column>                                                          
+                                 </apex:pageBlockTable> 
+                                 </apex:column>
+                             
+                              
+                              
+                           </apex:pageBlockTable> 
+                               
+                      </apex:pageBlockSection>
+                </apex:panelGrid>
+             </apex:panelGrid>         
+            
+           
+             
+             
+         </apex:pageBlock>
+         
+    </apex:form>
+    
+    
+
+ 
+  
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

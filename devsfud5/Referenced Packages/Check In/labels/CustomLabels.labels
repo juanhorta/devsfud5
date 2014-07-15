@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Add_New1</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Add New1</shortDescription>
+        <value>To locate a phone select a User or enter a name and mobile phone, then click Opt-in</value>
+    </labels>
+    <labels>
+        <fullName>Add_new</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Add new phone number</shortDescription>
+        <value>Welcome, please start here, please select a User or add a phone</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_ALREADY_CHECK_IN</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_ALREADY_CHECK_IN</shortDescription>
+        <value>Already Checked-in.</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_ALREADY_CHECK_OUT</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_ALREADY_CHECK_OUT</shortDescription>
+        <value>Already Checked-out.</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_CHECK_IN_SAVED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_CHECK_IN_SAVED</shortDescription>
+        <value>Check-in Saved.</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_CHECK_OUT_SAVED</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_CHECK_OUT_SAVED</shortDescription>
+        <value>Check-out Saved.</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_NO_EVENT_FOR_CHECK_OUT</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_NO_EVENT_FOR_CHECK_OUT</shortDescription>
+        <value>NO Event For Check Out.</value>
+    </labels>
+    <labels>
+        <fullName>CHATTER_SELECT_AN_EVENT_FIRST</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>CHATTER_SELECT_AN_EVENT_FIRST</shortDescription>
+        <value>You need to select an Event first.</value>
+    </labels>
+    <labels>
+        <fullName>Error_APEX</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>APEX Code error</shortDescription>
+        <value>An error was detected. If the problem persists please contact your Admin.</value>
+    </labels>
+    <labels>
+        <fullName>Error_MaxGetLocationList</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Limit Number of items selected</shortDescription>
+        <value>You have selected too many records to Locate. Please select fewer records then click Locate.</value>
+    </labels>
+    <labels>
+        <fullName>Error_MaxOptinCount</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Maximum Number of Opted in phones allowed per user</shortDescription>
+        <value>&quot;You have reached the maximum number of phones allowed,  to add new phones you must first delete other phone records&quot;</value>
+    </labels>
+    <labels>
+        <fullName>Error_NotAuthenticated</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Error_NotAuthenticated</shortDescription>
+        <value>Please contact your Admin to complete the App Setup and authenticate the websrevice</value>
+    </labels>
+    <labels>
+        <fullName>Error_UniquePhoneName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>The phone name must be unique</shortDescription>
+        <value>&quot;This phone name is in use and may not be added a second time&quot;</value>
+    </labels>
+    <labels>
+        <fullName>Error_UniquePhoneNumber</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>The phone number must be unique</shortDescription>
+        <value>&quot;This phone number is in use and may not be added a second time&quot;</value>
+    </labels>
+    <labels>
+        <fullName>Error_WebService</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Error SOAP</shortDescription>
+        <value>An error was detected while connecting to the remote web service.
+If the problem persists please contact your Admin.</value>
+    </labels>
+    <labels>
+        <fullName>Error_input_mobilephone</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Input Error, invalid mobile phone number</shortDescription>
+        <value>The phone number you have entered is not recognized by our  service and cannot be located, please check to ensure it is a valid mobile phone number</value>
+    </labels>
+    <labels>
+        <fullName>Error_input_name</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Input error invalid name</shortDescription>
+        <value>Please enter a name, up to 20 characters.</value>
+    </labels>
+    <labels>
+        <fullName>Error_input_phone</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Input Error, phone number</shortDescription>
+        <value>Please enter a valid mobile phone number, including the area code, for example 2223334444</value>
+    </labels>
+    <labels>
+        <fullName>Error_input_title</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Input Error, title</shortDescription>
+        <value>Input Error</value>
+    </labels>
+    <labels>
+        <fullName>Feedback_Locating</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Feedback Locating</shortDescription>
+        <value>Please wait, system is locating the mobile phone</value>
+    </labels>
+    <labels>
+        <fullName>Feedback_Pending</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Feedback Pending</shortDescription>
+        <value>Please wait, checking Opt-In status</value>
+    </labels>
+    <labels>
+        <fullName>GEOCODE_FAILED_LOCATE_DEVICE_AND_GET_ADDRESS</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>GEOCODE_FAILED_LOCATE_DEVICE_AND_GET_ADDRESS</shortDescription>
+        <value>Locating device using cell towers and updating address.</value>
+    </labels>
+    <labels>
+        <fullName>GEOCODE_SUCCESS_GET_ADDRESS</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>GEOCODE_SUCCESS_GET_ADDRESS</shortDescription>
+        <value>Device located with web browser.  Updating address.</value>
+    </labels>
+    <labels>
+        <fullName>Link_CancelPermission</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Link Cancel Permission</shortDescription>
+        <value>Opt-Out</value>
+    </labels>
+    <labels>
+        <fullName>Link_CheckStatus</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Check OptIn Status</shortDescription>
+        <value>Check Status</value>
+    </labels>
+    <labels>
+        <fullName>Link_Delete</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Link Delete</shortDescription>
+        <value>Delete All Locates</value>
+    </labels>
+    <labels>
+        <fullName>Link_LocateNow</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Link Locate Now</shortDescription>
+        <value>Locate Now</value>
+    </labels>
+    <labels>
+        <fullName>Link_MapIt</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Link MapIt</shortDescription>
+        <value>Map It</value>
+    </labels>
+    <labels>
+        <fullName>Link_RequestPermission</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Link Request Permission</shortDescription>
+        <value>Opt-In</value>
+    </labels>
+    <labels>
+        <fullName>LocateNotAvailable</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Locate button disabled</shortDescription>
+        <value>Locate Not Available</value>
+    </labels>
+    <labels>
+        <fullName>MP_Locate_LastLocate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Last Locate</shortDescription>
+        <value>Most Recent Locate</value>
+    </labels>
+    <labels>
+        <fullName>MP_Note</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>MP Permission Note</shortDescription>
+        <value>Please enter a name and a 10 digit mobile phone number, then click Optin</value>
+    </labels>
+    <labels>
+        <fullName>MP_Note_Cancelled</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Note Cancelled</shortDescription>
+        <value>.</value>
+    </labels>
+    <labels>
+        <fullName>MP_Note_NewPhone</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Note New Phone</shortDescription>
+        <value>.</value>
+    </labels>
+    <labels>
+        <fullName>MP_Note_Registered</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Note Registered</shortDescription>
+        <value>.</value>
+    </labels>
+    <labels>
+        <fullName>MP_Page_LocateNow</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Page Title LocateNow</shortDescription>
+        <value>To locate a mobile phone, please select then click &quot;Locate&quot;</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_CancelPermission</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Permission Col Cancel Permission</shortDescription>
+        <value>Cancel Permission To Locate</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_CheckStatus</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Heading Check Status</shortDescription>
+        <value>Check Opt-In Status</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_Delete</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Delete All Records</shortDescription>
+        <value>Delete Location History</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_LastUpdate</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Colmn Last Update</shortDescription>
+        <value>Date Last Update</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_MobilePhoneName</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Mobile Phone Name</shortDescription>
+        <value>Mobile Phone Name</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_MobilePhoneNumber</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Mobile Phone Number</shortDescription>
+        <value>Mobile Phone Number</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_Permission</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Permission</shortDescription>
+        <value>Request Permission To Locate</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_Status_Optin</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Heading Status Optin</shortDescription>
+        <value>Permission Status = Opt - In</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_Status_Optout</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Heading Status Optout</shortDescription>
+        <value>Permission Status = Opt - Out</value>
+    </labels>
+    <labels>
+        <fullName>MP_Permission_Col_Status_Pending</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Heading Status Pending</shortDescription>
+        <value>Permission Status = Pending</value>
+    </labels>
+    <labels>
+        <fullName>MP_col_note</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Column Notes</shortDescription>
+        <value>Notes</value>
+    </labels>
+    <labels>
+        <fullName>Message_CheckStatus</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Check Status Message</shortDescription>
+        <value>Check if mobile user has responded to opt-in SMS message. Mobile user may not yet have responded, may have responded to opt-in or opt-out.</value>
+    </labels>
+    <labels>
+        <fullName>Message_Delete_All</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message Delete All</shortDescription>
+        <value>Once you click Delete All, location details for this mobile phone will be erased forever.</value>
+    </labels>
+    <labels>
+        <fullName>Message_Locate_Now</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Message Locate Now</shortDescription>
+        <value>Locating the mobile phone, this may take a few minutes</value>
+    </labels>
+    <labels>
+        <fullName>Message_Optin</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message Opt-in</shortDescription>
+        <value>Once you click Opt-in, an SMS will be sent to the mobile phone. If the mobile phone user responds via SMS electing to Opt-in, then you can locate the mobile phone from the Locate Now tab. If the mobile phone user responds electing to Opt-out the mobile phone will not be available from the &quot;Locate Now&quot; tab and may not be located.</value>
+    </labels>
+    <labels>
+        <fullName>Message_Optout</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message Optout</shortDescription>
+        <value>Once you click Opt-out, the mobile phone will NOT be available to &quot;Locate Now&quot; and a confirmation SMS will be sent to the mobile phone,</value>
+    </labels>
+    <labels>
+        <fullName>Next_Scheduled_Update</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Next Scheduled Update</shortDescription>
+        <value>Next Scheduled Update</value>
+    </labels>
+    <labels>
+        <fullName>RegWarT1</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>RegistrationWarningT1</shortDescription>
+        <value>Prior to canceling a permission, it must be granted.</value>
+    </labels>
+    <labels>
+        <fullName>TimeCheck</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Allowed to locate time periods</shortDescription>
+        <value>The Locate function is not available at this time. It is available within Allowed Periods as defined in the app set up.
+Please contact your salesforce admin.</value>
+    </labels>
+    <labels>
+        <fullName>Tower_Icon_mouseover</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Tower Icon mouseover</shortDescription>
+        <value>Click an icon to change its color</value>
+    </labels>
+    <labels>
+        <fullName>recipient_Email</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>recipient Email</shortDescription>
+        <value>note@gpsdashboard.com</value>
+    </labels>
+</CustomLabels>

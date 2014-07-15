@@ -1,0 +1,197 @@
+<apex:page >
+<!--1/oct BOT <apex:page standardStylesheets="false" showHeader="false" sidebar="false" standardController="MobilePhone__c"   extensions="PendingMobilePhoneExtension" recordSetVar="mobilephones">
+
+<apex:stylesheet value="{!URLFOR($Resource.styles, 'styles.css')}" />
+    <apex:outputText style="font-size:16px; font-weight:bold"  value="{!$Label.MP_Permission_Col_Status_Pending}"/>
+  <apex:image id="MobileUser" value="{!$Resource.MobileUser}" style="align: right;" width="47" height="46"/>
+  <apex:image id="SMSQuestion" value="{!$Resource.SMSQuestion}" style="align: right;" width="46" height="46"/>  
+<apex:form id="the_pendingform">
+    <div id="workstatusdiv"></div>
+    <apex:actionStatus id="statusActionManuadelete1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+     </apex:actionStatus>
+    <apex:dataTable value="{!PendingMobilePhoneRecords}" var="pitem" rowClasses="odd,even" id="the_pendingtable">
+        <apex:column headerValue="{!$Label.MP_Permission_Col_MobilePhoneName}">
+            <apex:outputText value="{!pitem.name}"/>
+        </apex:column>  
+        <apex:column headerValue="{!$Label.MP_Permission_Col_MobilePhoneNumber}">
+            <apex:outputText value="{!pitem.MobilePhoneNumber__c}"/>
+        </apex:column>
+        <apex:column headerValue="{!$Label.MP_Permission_Col_LastUpdate}">
+           <apex:outputField value="{!pitem.LastModifiedDate}" />
+  <!--           <apex:outputText value="   |  "/>
+  <!--          <apex:commandLink value="{!$Label.Link_CheckStatus}" action="{!showPopup}" rerender="popupRegisterStatus">
+  <!--           <apex:param value="{!pitem.id}" name="mobilePhoneId" assignto="{!mobilePhoneId}"/>    
+  <!--         </apex:commandLink>  --> 
+     <!--BOT 1/oct   </apex:column> -->
+ <!--            <apex:column headerValue="{!$Label.Next_Scheduled_Update}">
+ <!--            <apex:outputText value="{0,date,yyyy/MM/dd HH:mm}">
+ <!--                <apex:param value="{!pitem.CreatedDate}"/>
+ <!--            </apex:outputText>
+ <!--            <apex:outputText value="   |  "/>  -->
+ <!--            <apex:outputField value="{!pitem.Next_Check_Status__c}" />
+ <!--   </apex:column>
+        <!-- 
+         <apex:column headerValue="{!$Label.Last_Manual_Status_Check_Date}">
+             <apex:outputField value="{!pitem.Last_Manual_Status_Check_Date__c}"  />
+        </apex:column> -->
+        <!-- BOT 1/oct
+      <apex:column headerValue="{!$Label.MP_Permission_Col_CheckStatus}">
+            <apex:commandLink value="{!$Label.Link_CheckStatus}" action="{!showPopup}" rerender="popupRegisterStatus">
+              <apex:param value="{!pitem.id}" name="mobilePhoneId" assignto="{!mobilePhoneId}"/>    
+            </apex:commandLink>
+        </apex:column>
+      <apex:column headerValue="DELETE">
+            <apex:commandLink value="Delete" action="{!denyRecord}" rerender="the_pendingtable" status="statusActionManuadelete1" >
+              <apex:param value="{!pitem.id}" name="mobilePhoneId" assignto="{!mobilePhoneId}"/>    
+            </apex:commandLink>
+        </apex:column>
+    </apex:dataTable>
+    
+  
+        
+ 
+         <apex:outputPanel id="popupRegisterStatus">
+           <apex:outputPanel id="popupLocateNowError">
+        
+        <apex:outputPanel styleClass="customPopupChek" layout="block" rendered="{!displayErrorPopUp}">
+            <br/>
+            "{!errorMessage}" <br/><br/><br/>
+           
+             <apex:actionStatus id="statusActionManualyi1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                               <apex:commandLink value="OK" action="{!closeErrorpop}" rerender="popupLocateNowError,thedata" styleClass="btn" style="TEXT-DECORATION:none" status="statusActionManualyi1"/>
+                             
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+        </apex:outputPanel>
+    </apex:outputPanel>
+            <script>
+            
+             var isfresh={!isrefresh};
+              if({!isrefresh}){
+                 window.parent.location.href="/apex/IncludeVFPages?sfdc.tabName=01r80000000HgKp";
+              }
+            </script>
+            <apex:outputPanel styleClass="customPopupChek" layout="block" rendered="{!displayPopUp}">
+            <apex:messages style="color:red"/>
+                <div align="center">{!$Label.Link_CheckStatus} </div>
+                 {!$Label.Message_CheckStatus}<br/><br/><br/><br/>
+                 <apex:actionStatus id="statusActionManual" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterStatus"  status="statusActionManual"/>
+                                
+                                <apex:commandButton value="OK" action="{!StatusCheck}" rerender="popupRegisterStatus"  status="statusActionManual"/>
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+                
+            </apex:outputPanel>
+        </apex:outputPanel>
+           <script>
+              var test='1';
+           </script>
+           <apex:outputPanel id="popupRegisterCancel">
+           <!-- 
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.Link_CancelPermission}"<br/>
+                "{!$Label.Message_Optout}" <br/><br/><br/>
+                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterCancel"/>
+                 <apex:outputText value="   " />
+                <apex:commandButton value="{!$Label.Link_CancelPermission}" action="{!closePopup}" rerender="popupRegisterCancel"/>
+            </apex:outputPanel>
+            <apex:outputPanel id="popupRegisterCancel">
+             -->
+            BOT -->
+            <!-- BOT 1/oct
+            <apex:outputPanel styleClass="customPopupCancel1" layout="block" rendered="{!displayPopUp}">
+                "{!$Label.Link_CancelPermission}"<br/>
+                "{!$Label.Message_Optout}" <br/><br/><br/>
+               
+                 <apex:actionStatus id="statusActionManual1" layout="block"  >
+                        <apex:facet name="start" > 
+                            <apex:outputPanel >
+                                <apex:image value="{!$Resource.loading}"  rendered="true"/>&nbsp;&nbsp;&nbsp;
+                                <apex:outputLabel value="Processing. . ." style="font-weight:bold; color:green;"/>
+                            </apex:outputPanel>
+                        </apex:facet>
+                    
+                        <apex:facet name="stop"> 
+                            <apex:outputPanel > 
+                                <apex:commandButton value="Cancel" action="{!closePopup}" rerender="popupRegisterCancel" status="statusActionManual1"/>
+                                      <apex:outputText value="   " />
+                                <apex:commandButton value="{!$Label.Link_CancelPermission}" action="{!cancelRegistered}"  status="statusActionManual1"/>
+                             </apex:outputPanel>
+                         </apex:facet>
+                    </apex:actionStatus>
+                
+            </apex:outputPanel>
+        </apex:outputPanel>
+ 
+         <apex:outputPanel id="popupWarning">
+            <apex:outputPanel styleClass="customPopup" layout="block" rendered="{!displayPopUp}">
+                Please Note<br/>
+                "{!$Label.RegWarT1}"
+                , Text should be retrieved from Static Resources
+                resourceT1, or T2, or T3.. <br/><br/><br/><br/>
+                <apex:commandButton value="Hide" action="{!closePopup}" rerender="popupWarning"/>
+            </apex:outputPanel>
+        </apex:outputPanel>
+ 
+    </apex:form>
+ 
+    <style type="text/css">
+       .customPopupChek{
+            background-color: white;
+            border-style: solid;
+            border-width: 2px;
+            left: 50%;
+            padding:10px;
+            position: absolute;
+            z-index: 9999;
+            /* These are the 3 css properties you will need to tweak so the pop 
+            up displays in the center of the screen. First set the width. Then set 
+            margin-left to negative half of what the width is. You can also add 
+            the height property for a fixed size pop up.*/
+            width: 500px;
+            margin-left: -250px;
+            margin-top:-100px;
+        }
+    </style>
+ <script language="javascript" >
+    function confirmCancel() {
+       var isCancel = confirm("Are you sure?");
+        if (isCancel) {
+           //document.getElementById("{!$Component.theform.step.thebuttons.the_tj}").disabled=true;
+           //window.setTimeout(tjcn,10);
+           return true;
+       }
+          return false;
+}
+  </script>
+  <br/> 
+  <!-- End Default Content REMOVE THIS -->
+-->
+</apex:page>

@@ -1,0 +1,20 @@
+<apex:page standardController="Opportunity" extensions="CTR009_AssetAutomatization">
+	
+	<apex:pageMessages />
+	<apex:form id="formSyncAsset">
+		<apex:pageBlock title="" mode="edit">
+			<apex:pageBlockButtons >
+				<apex:commandButton action="{!StartSync}" value="Iniciar sincronización" >
+				</apex:commandButton>
+				<a href='/{!Opportunity.Id}'>Atrás</a>
+			</apex:pageBlockButtons>
+			<p>Antes de realizar la sincronización de cotización <b>{!Opportunity.Name}</b> con sus activos tenga en cuenta:</p>
+			<br/>
+			<ul>
+				<li>Solo puede ser ejecutada por el administrador del sistema.</li>
+				<li>Esta información fue previamente sincronizada y puede sobreescribir la información actualmente guardada.</li>
+			</ul> 		
+		</apex:pageBlock>
+	</apex:form>
+
+</apex:page>

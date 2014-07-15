@@ -1,0 +1,22 @@
+<apex:page showHeader="false" >
+    <body>
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><img src="https://www.agendize.com/web//img/chat_es.gif" onclick="AZ_show('21602361')" style="cursor:pointer;" id="az_21602361" /><script id="azscript" type="text/javascript" src="https://www.agendize.com/web/tool.js?id=21602361"></script></td>
+            </tr>
+        </table>
+    </body>
+</apex:page>
