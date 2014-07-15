@@ -1,10 +1,7 @@
 /*
 *	Utils class 
 *	12 Enero 2013 - Jairo Guzman - Get month spanish names 
-*	github
-*	github1
-*	github2
-*	github3.1.1.1.2
+*	
 */
 public class CL000_Utils {
 	
